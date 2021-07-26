@@ -44,6 +44,18 @@ public class CustomerService {
             });
     }
 
+    public Customer registerCustomer(String numberPhone) {
+        Customer newCustomer = new Customer();
+        newCustomer.setPhone(numberPhone);
+        newCustomer.setActivated(true);
+        newCustomer.setCreatedBy("mine");
+        newCustomer.setLastModifiedBy("mine");
+        customerRepository.save(newCustomer);
+        // this.clearUserCaches(newCustomer);
+        log.debug("Tạo mới người dùng: {}", newCustomer);
+        return newCustomer;
+    }
+
     /**
      * Update all information for a specific user, and return the modified user.
      *
