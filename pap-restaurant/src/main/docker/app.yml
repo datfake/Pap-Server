@@ -1,0 +1,36 @@
+version: '2'
+services:
+  restaurant_server-app:
+    image: restaurant_server
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://restaurant_server-postgresql:5432/restaurant_server
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://restaurant_server-redis:6379
+      - JHIPSTER_CACHE_REDIS_CLUSTER=false
+      # - JHIPSTER_CACHE_REDIS_SERVER=redis://restaurant_server-redis:6379
+      # - JHIPSTER_CACHE_REDIS_CLUSTER=true
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - KAFKA_BOOTSTRAPSERVERS=kafka:9092
+    ports:
+      - 8080:8080
+  restaurant_server-postgresql:
+    extends:
+      file: postgresql.yml
+      service: restaurant_server-postgresql
+  restaurant_server-redis:
+    extends:
+      file: redis.yml
+      service: restaurant_server-redis
+  kafka:
+    extends:
+      file: kafka.yml
+      service: kafka
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+  zookeeper:
+    extends:
+      file: kafka.yml
+      service: zookeeper
