@@ -1,6 +1,8 @@
 package com.pap.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
+import org.aspectj.weaver.ast.Or;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A Manager Customer.
@@ -18,6 +22,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "customer")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@JsonIgnoreProperties(value = {"orders"})
 public class Customer extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,6 +46,9 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
+    @Column(name = "address", length = 250)
+    private String address;
+
     @NotNull
     @Column(nullable = false)
     private boolean activated = false;
@@ -48,6 +56,9 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
     @Size(max = 256)
     @Column(name = "image_url", length = 256)
     private String imageUrl;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Order> orders = new LinkedHashSet<>(0);
 
     public String getId() {
         return id;
@@ -95,6 +106,22 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.pap.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
+import lombok.EqualsAndHashCode;
+import net.bytebuddy.build.ToStringPlugin;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A Manager Restaurant.
@@ -19,6 +24,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "manager_restaurant")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@JsonIgnoreProperties(value = {"items", "categories", "reviews", "discounts"})
 public class ManagerRestaurant extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,12 +55,51 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
     private String email;
 
     @NotNull
+    @Column(name = "name_restaurant", length = 500)
+    private String nameRestaurant;
+
+    @Column(name = "summary")
+    private String summary;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "so_dkkd")
+    private String soDKKD;
+
+    @NotNull
+    @Column(name = "address")
+    private String address;
+
+    @NotNull
+    @Column(name = "status")
+    private boolean status = false;
+
+    @NotNull
+    @Column(name = "is_partner")
+    private boolean is_partner=false;
+
+    @NotNull
     @Column(nullable = false)
     private boolean activated = false;
 
     @Size(max = 256)
     @Column(name = "image_url", length = 256)
     private String imageUrl;
+
+    @ManyToMany(mappedBy = "restaurants", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToStringPlugin.Exclude
+    private Set<Category> categories;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Item> items = new LinkedHashSet<>(0);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Review> reviews = new LinkedHashSet<>(0);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Discount> discounts = new LinkedHashSet<>(0);
 
     public String getId() {
         return id;
@@ -110,6 +155,94 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getNameRestaurant() {
+        return nameRestaurant;
+    }
+
+    public void setNameRestaurant(String nameRestaurant) {
+        this.nameRestaurant = nameRestaurant;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getSoDKKD() {
+        return soDKKD;
+    }
+
+    public void setSoDKKD(String soDKKD) {
+        this.soDKKD = soDKKD;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isIs_partner() {
+        return is_partner;
+    }
+
+    public void setIs_partner(boolean is_partner) {
+        this.is_partner = is_partner;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<Item> items) {
+        this.items = items;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Set<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(Set<Discount> discounts) {
+        this.discounts = discounts;
     }
 
     @Override
