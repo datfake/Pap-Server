@@ -98,7 +98,7 @@ public class CourierController {
         if (!courier.isPresent()) {
             throw new AccountResourceException("Courier could not be found");
         }
-        courierService.updateUser(courierDTO.getFullName(), courierDTO.getEmail(), courierDTO.getImageUrl());
+        courierService.updateUser(courierDTO.getEmail(), courierDTO.getImageUrl());
         return new ResponseEntity("Thay đổi thông tin thành công", HttpStatus.OK);
     }
 

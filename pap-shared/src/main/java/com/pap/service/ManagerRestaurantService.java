@@ -82,6 +82,11 @@ public class ManagerRestaurantService {
         if (managerRestaurantDTO.getEmail() != null) {
             newManagerRestaurant.setEmail(managerRestaurantDTO.getEmail().toLowerCase());
         }
+        newManagerRestaurant.setAddress(managerRestaurantDTO.getAddress());
+        newManagerRestaurant.setContent(managerRestaurantDTO.getContent());
+        newManagerRestaurant.setSummary(managerRestaurantDTO.getSummary());
+        newManagerRestaurant.setSoDKKD(managerRestaurantDTO.getSoDKKD());
+        newManagerRestaurant.setNameRestaurant(managerRestaurantDTO.getNameRestaurant());
         newManagerRestaurant.setImageUrl(managerRestaurantDTO.getImageUrl());
         newManagerRestaurant.setActivated(true);
         managerRestaurantRepository.save(newManagerRestaurant);
@@ -152,11 +157,14 @@ public class ManagerRestaurantService {
         });
     }
 
-    public void updateUser(String fullName, String email, String imageUrl) {
+    public void updateUser(String nameRestaurant, String summary, String content, String address, String email, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(managerRestaurantRepository::findOneByPhone)
             .ifPresent(user -> {
-                user.setFullName(fullName);
+                user.setNameRestaurant(nameRestaurant);
+                user.setSummary(summary);
+                user.setContent(content);
+                user.setAddress(address);
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }

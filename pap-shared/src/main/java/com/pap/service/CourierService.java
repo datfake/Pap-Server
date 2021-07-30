@@ -63,6 +63,8 @@ public class CourierService {
         // new ManagerRestaurant gets initially a generated password
         newCourier.setPassword(encryptedPassword);
         newCourier.setFullName(courierDTO.getFullName());
+        newCourier.setLicensePlate(courierDTO.getLicensePlate());
+        newCourier.setSoCMND(courierDTO.getSoCMND());
         if (courierDTO.getEmail() != null) {
             newCourier.setEmail(courierDTO.getEmail().toLowerCase());
         }
@@ -134,11 +136,10 @@ public class CourierService {
         });
     }
 
-    public void updateUser(String fullName, String email, String imageUrl) {
+    public void updateUser(String email, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(courierRepository::findOneByPhone)
             .ifPresent(user -> {
-                user.setFullName(fullName);
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
