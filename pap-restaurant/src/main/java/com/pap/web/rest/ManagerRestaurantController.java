@@ -97,7 +97,7 @@ public class ManagerRestaurantController {
         if (!managerRestaurant.isPresent()) {
             throw new AccountResourceException("ManagerRestaurant could not be found");
         }
-        managerRestaurantService.updateUser(managerRestaurantDTO.getFullName(), managerRestaurantDTO.getEmail(), managerRestaurantDTO.getImageUrl());
+        managerRestaurantService.updateUser(managerRestaurantDTO.getNameRestaurant(), managerRestaurantDTO.getSummary(), managerRestaurantDTO.getContent(), managerRestaurantDTO.getAddress(), managerRestaurantDTO.getEmail(), managerRestaurantDTO.getImageUrl());
         return new ResponseEntity("Thay đổi thông tin thành công", HttpStatus.OK);
     }
 

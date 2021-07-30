@@ -77,7 +77,7 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
 
     @NotNull
     @Column(name = "is_partner")
-    private boolean is_partner=false;
+    private boolean isPartner=false;
 
     @NotNull
     @Column(nullable = false)
@@ -205,12 +205,12 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
         this.status = status;
     }
 
-    public boolean isIs_partner() {
-        return is_partner;
+    public boolean isPartner() {
+        return isPartner;
     }
 
-    public void setIs_partner(boolean is_partner) {
-        this.is_partner = is_partner;
+    public void setPartner(boolean partner) {
+        isPartner = partner;
     }
 
     public Set<Category> getCategories() {

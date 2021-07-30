@@ -45,6 +45,8 @@ public class CourierMapper {
             courier.setEmail(courierDTO.getEmail());
             courier.setImageUrl(courierDTO.getImageUrl());
             courier.setActivated(courierDTO.isActivated());
+            courier.setLicensePlate(courierDTO.getLicensePlate());
+            courier.setSoCMND(courierDTO.getSoCMND());
             return courier;
         }
     }

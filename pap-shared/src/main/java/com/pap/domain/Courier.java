@@ -53,11 +53,11 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     private String email;
 
     @Size(min = 9, max = 12)
-    @Column(name="so_cmnd")
+    @Column(name="so_cmnd", unique = true, nullable = false)
     @NotNull
     private String soCMND;
 
-    @Column(name="license_plate")
+    @Column(name="license_plate", unique = true, nullable = false)
     @NotNull
     private String licensePlate;
 
