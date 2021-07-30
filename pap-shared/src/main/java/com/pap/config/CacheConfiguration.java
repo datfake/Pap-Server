@@ -1,8 +1,6 @@
 package com.pap.config;
 
-import com.pap.domain.Courier;
-import com.pap.domain.Customer;
-import com.pap.domain.ManagerRestaurant;
+import com.pap.domain.*;
 import com.pap.repository.CourierRepository;
 import com.pap.repository.CustomerRepository;
 import com.pap.repository.ManagerRestaurantRepository;
@@ -91,6 +89,12 @@ public class CacheConfiguration {
             createCache(cm, CourierRepository.USERS_BY_PHONE_CACHE, jcacheConfiguration);
             createCache(cm, CourierRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             createCache(cm, Courier.class.getName(), jcacheConfiguration);
+            createCache(cm, Category.class.getName(), jcacheConfiguration);
+            createCache(cm, Discount.class.getName(), jcacheConfiguration);
+            createCache(cm, Item.class.getName(), jcacheConfiguration);
+            createCache(cm, Order.class.getName(), jcacheConfiguration);
+            createCache(cm, OrderDetail.class.getName(), jcacheConfiguration);
+            createCache(cm, Review.class.getName(), jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }

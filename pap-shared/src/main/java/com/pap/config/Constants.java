@@ -12,6 +12,14 @@ public final class Constants {
     public static final String DEFAULT_LANGUAGE = "en";
     public static final String ANONYMOUS_USER = "anonymoususer";
 
+    public enum CourierStatus {
+        OFFLINE, ONLINE, BUSY
+    }
+
+    public enum OrderStatus {
+        DANGCHON, DAHUY, CHUACOSHIP, DAGIAO, DANGGIAO
+    }
+
     private Constants() {
     }
 }

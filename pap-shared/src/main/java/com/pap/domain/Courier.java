@@ -1,6 +1,7 @@
 package com.pap.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -12,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A Manager Courier.
@@ -19,6 +22,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "courier")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@JsonIgnoreProperties(value = {"orders"})
 public class Courier extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +52,19 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
+    @Size(min = 9, max = 12)
+    @Column(name="so_cmnd")
+    @NotNull
+    private String soCMND;
+
+    @Column(name="license_plate")
+    @NotNull
+    private String licensePlate;
+
+    @Column(nullable = false)
+    @NotNull
+    private Constants.CourierStatus status = Constants.CourierStatus.OFFLINE;
+
     @NotNull
     @Column(nullable = false)
     private boolean activated = false;
@@ -55,6 +72,9 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     @Size(max = 256)
     @Column(name = "image_url", length = 256)
     private String imageUrl;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "courier", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Order> orders = new LinkedHashSet<>(0);
 
     public String getId() {
         return id;
@@ -110,6 +130,38 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getSoCMND() {
+        return soCMND;
+    }
+
+    public void setSoCMND(String soCMND) {
+        this.soCMND = soCMND;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public Constants.CourierStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(Constants.CourierStatus status) {
+        this.status = status;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     @Override
