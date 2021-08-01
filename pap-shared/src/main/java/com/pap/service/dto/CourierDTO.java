@@ -1,16 +1,13 @@
 package com.pap.service.dto;
 
-import com.pap.config.Constants;
 import com.pap.domain.Courier;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -38,24 +35,24 @@ public class CourierDTO {
     private String licensePlate;
 
     @Size(max = 256)
-    private String imageUrl;
+    private String avatar;
 
     private boolean activated = false;
 
     private String createdBy;
 
-    private Instant createdDate;
+    private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
-    private Instant lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public CourierDTO(Courier courier) {
         this.id = courier.getId();
         this.phone = courier.getPhone();
         this.fullName = courier.getFullName();
         this.email = courier.getEmail();
-        this.imageUrl = courier.getImageUrl();
+        this.avatar = courier.getAvatar();
         this.licensePlate = courier.getLicensePlate();
         this.soCMND = courier.getSoCMND();
         this.activated = courier.isActivated();
@@ -72,7 +69,7 @@ public class CourierDTO {
             ", phone='" + phone + '\'' +
             ", fullName='" + fullName + '\'' +
             ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
+            ", imageUrl='" + avatar + '\'' +
             ", activated=" + activated +
             ", createdBy='" + createdBy + '\'' +
             ", createdDate=" + createdDate +

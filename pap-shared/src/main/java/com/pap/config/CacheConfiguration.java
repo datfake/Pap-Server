@@ -95,6 +95,10 @@ public class CacheConfiguration {
             createCache(cm, Order.class.getName(), jcacheConfiguration);
             createCache(cm, OrderDetail.class.getName(), jcacheConfiguration);
             createCache(cm, Review.class.getName(), jcacheConfiguration);
+            createCache(cm, Notice.class.getName(), jcacheConfiguration);
+            createCache(cm, CategoryItem.class.getName(), jcacheConfiguration);
+            createCache(cm, OptionItem.class.getName(), jcacheConfiguration);
+            createCache(cm, OptionItemChild.class.getName(), jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }

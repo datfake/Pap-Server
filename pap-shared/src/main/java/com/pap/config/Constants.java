@@ -20,6 +20,14 @@ public final class Constants {
         DANGCHON, DAHUY, CHUACOSHIP, DAGIAO, DANGGIAO
     }
 
+    public enum TypeBusiness {
+        CANHAN, HOKINHDOANH, DOANHNGHIEP
+    }
+
+    public enum RoleManagerRestaurant {
+        CHUCUAHANG, GIAMDOC, QUANLY, NGUOIUYQUYEN
+    }
+
     private Constants() {
     }
 }
