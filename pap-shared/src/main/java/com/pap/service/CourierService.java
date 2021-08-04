@@ -68,7 +68,7 @@ public class CourierService {
         if (courierDTO.getEmail() != null) {
             newCourier.setEmail(courierDTO.getEmail().toLowerCase());
         }
-        newCourier.setImageUrl(courierDTO.getImageUrl());
+        newCourier.setAvatar(courierDTO.getAvatar());
         newCourier.setActivated(true);
         courierRepository.save(newCourier);
         this.clearUserCaches(newCourier);
@@ -93,7 +93,7 @@ public class CourierService {
         if (courierDTO.getEmail() != null) {
             courier.setEmail(courierDTO.getEmail().toLowerCase());
         }
-        courier.setImageUrl(courierDTO.getImageUrl());
+        courier.setAvatar(courierDTO.getAvatar());
         courier.setActivated(true);
         courierRepository.save(courier);
         this.clearUserCaches(courier);
@@ -119,7 +119,7 @@ public class CourierService {
                 if (courierDTO.getEmail() != null) {
                     user.setEmail(courierDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(courierDTO.getImageUrl());
+                user.setAvatar(courierDTO.getAvatar());
                 user.setActivated(courierDTO.isActivated());
                 this.clearUserCaches(user);
                 log.debug("Changed Information for Courier: {}", user);
@@ -143,7 +143,7 @@ public class CourierService {
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
-                user.setImageUrl(imageUrl);
+                user.setAvatar(imageUrl);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for Courier: {}", user);
             });

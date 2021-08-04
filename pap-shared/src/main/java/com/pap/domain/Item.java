@@ -1,21 +1,24 @@
 package com.pap.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "item")
 @Data
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIgnoreProperties(value = {"optionItems"})
 public class Item extends AbstractAuditingEntity implements Serializable {
 
     @Id
@@ -24,7 +27,7 @@ public class Item extends AbstractAuditingEntity implements Serializable {
     @Column(columnDefinition = "CHAR(36)", updatable = false, nullable = false)
     private String id = null;
 
-    @NotBlank
+    @NotNull
     @Column(name = "name", length = 256)
     private String name;
 
@@ -50,6 +53,9 @@ public class Item extends AbstractAuditingEntity implements Serializable {
     private int countOrdered;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    private ManagerRestaurant restaurant;
+    @JoinColumn(name = "categoryItem_id", nullable = false)
+    private CategoryItem categoryItem;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<OptionItem> optionItems = new LinkedHashSet<>(0);
 }

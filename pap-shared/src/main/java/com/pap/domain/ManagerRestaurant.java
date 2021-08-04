@@ -3,6 +3,7 @@ package com.pap.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.bytebuddy.build.ToStringPlugin;
 import org.hibernate.annotations.Cache;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -23,8 +25,9 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "manager_restaurant")
+@Data
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@JsonIgnoreProperties(value = {"items", "categories", "reviews", "discounts"})
+@JsonIgnoreProperties(value = {"categoryItems", "categories", "reviews", "discounts"})
 public class ManagerRestaurant extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -79,13 +82,64 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
     @Column(name = "is_partner")
     private boolean isPartner=false;
 
+    @Column(name = "sharing")
+    private int sharing;
+
     @NotNull
     @Column(nullable = false)
     private boolean activated = false;
 
     @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
+    @Column(name = "avatar", length = 256)
+    private String avatar;
+
+    @NotNull
+    @Size(max = 256)
+    @Column(name = "image_restaurant", length = 256)
+    private String imageRestaurant;
+
+    @NotNull
+    @Column(name = "type_business")
+    private Constants.TypeBusiness typeBusiness;
+
+    @NotNull
+    @Size(max = 12)
+    @Column(name = "so_cmnd", length = 256)
+    private String soCmnd;
+
+    @NotNull
+    @Size(max = 256)
+    @Column(name = "image_first_cmnd", length = 256)
+    private String imageFirstCmnd;
+
+    @NotNull
+    @Size(max = 256)
+    @Column(name = "image_last_cmnd", length = 256)
+    private String imageLastCmnd;
+
+    @NotNull
+    @Column(name = "date_cmnd")
+    private LocalDate dateCmnd;
+
+    @NotNull
+    @Column(name = "bank_number", length = 20)
+    private String bankNumber;
+
+    @NotNull
+    @Column(name = "name_bank", length = 256)
+    private String nameBank;
+
+    @NotNull
+    @Column(name = "full_name_bank", length = 256)
+    private String fullNameBank;
+
+    @NotNull
+    @Column(name = "branch_bank", length = 256)
+    private String branchBank;
+
+    @NotNull
+    @Column(name = "role")
+    private Constants.RoleManagerRestaurant roleManagerRestaurant;
 
     @ManyToMany(mappedBy = "restaurants", fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
@@ -93,157 +147,13 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
     private Set<Category> categories;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Item> items = new LinkedHashSet<>(0);
+    private Set<CategoryItem> categoryItems = new LinkedHashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Review> reviews = new LinkedHashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Discount> discounts = new LinkedHashSet<>(0);
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getNameRestaurant() {
-        return nameRestaurant;
-    }
-
-    public void setNameRestaurant(String nameRestaurant) {
-        this.nameRestaurant = nameRestaurant;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getSoDKKD() {
-        return soDKKD;
-    }
-
-    public void setSoDKKD(String soDKKD) {
-        this.soDKKD = soDKKD;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public boolean isPartner() {
-        return isPartner;
-    }
-
-    public void setPartner(boolean partner) {
-        isPartner = partner;
-    }
-
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
-    }
-
-    public Set<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Set<Item> items) {
-        this.items = items;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public Set<Discount> getDiscounts() {
-        return discounts;
-    }
-
-    public void setDiscounts(Set<Discount> discounts) {
-        this.discounts = discounts;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -272,7 +182,7 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
             ", fullName='" + fullName + '\'' +
             ", email='" + email + '\'' +
             ", activated=" + activated +
-            ", imageUrl='" + imageUrl + '\'' +
+            ", avatar='" + avatar + '\'' +
             '}';
     }
 }

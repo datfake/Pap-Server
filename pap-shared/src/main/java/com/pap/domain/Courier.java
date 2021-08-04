@@ -3,6 +3,7 @@ package com.pap.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
+import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,6 +22,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "courier")
+@Data
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @JsonIgnoreProperties(value = {"orders"})
 public class Courier extends AbstractAuditingEntity implements Serializable {
@@ -70,99 +72,11 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     private boolean activated = false;
 
     @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
+    @Column(name = "avatar", length = 256)
+    private String avatar;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "courier", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Order> orders = new LinkedHashSet<>(0);
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getSoCMND() {
-        return soCMND;
-    }
-
-    public void setSoCMND(String soCMND) {
-        this.soCMND = soCMND;
-    }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
-
-    public Constants.CourierStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(Constants.CourierStatus status) {
-        this.status = status;
-    }
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -192,7 +106,7 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
             ", fullName='" + fullName + '\'' +
             ", email='" + email + '\'' +
             ", activated=" + activated +
-            ", imageUrl='" + imageUrl + '\'' +
+            ", avatar='" + avatar + '\'' +
             '}';
     }
 }

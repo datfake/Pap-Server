@@ -43,7 +43,7 @@ public class CustomerMapper {
             customer.setId(customerDTO.getId());
             customer.setPhone(customerDTO.getPhone());
             customer.setEmail(customerDTO.getEmail());
-            customer.setImageUrl(customerDTO.getImageUrl());
+            customer.setAvatar(customerDTO.getAvatar());
             customer.setActivated(customerDTO.isActivated());
             return customer;
         }

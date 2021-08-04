@@ -87,7 +87,7 @@ public class ManagerRestaurantService {
         newManagerRestaurant.setSummary(managerRestaurantDTO.getSummary());
         newManagerRestaurant.setSoDKKD(managerRestaurantDTO.getSoDKKD());
         newManagerRestaurant.setNameRestaurant(managerRestaurantDTO.getNameRestaurant());
-        newManagerRestaurant.setImageUrl(managerRestaurantDTO.getImageUrl());
+        newManagerRestaurant.setAvatar(managerRestaurantDTO.getAvatar());
         newManagerRestaurant.setActivated(true);
         managerRestaurantRepository.save(newManagerRestaurant);
         this.clearUserCaches(newManagerRestaurant);
@@ -112,7 +112,7 @@ public class ManagerRestaurantService {
         if (managerRestaurantDTO.getEmail() != null) {
             managerRestaurant.setEmail(managerRestaurantDTO.getEmail().toLowerCase());
         }
-        managerRestaurant.setImageUrl(managerRestaurantDTO.getImageUrl());
+        managerRestaurant.setAvatar(managerRestaurantDTO.getAvatar());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         managerRestaurant.setPassword(encryptedPassword);
         managerRestaurant.setActivated(true);
@@ -140,7 +140,7 @@ public class ManagerRestaurantService {
                 if (managerRestaurantDTO.getEmail() != null) {
                     user.setEmail(managerRestaurantDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(managerRestaurantDTO.getImageUrl());
+                user.setAvatar(managerRestaurantDTO.getAvatar());
                 user.setActivated(managerRestaurantDTO.isActivated());
                 this.clearUserCaches(user);
                 log.debug("Changed Information for ManagerRestaurant: {}", user);
@@ -157,7 +157,7 @@ public class ManagerRestaurantService {
         });
     }
 
-    public void updateUser(String nameRestaurant, String summary, String content, String address, String email, String imageUrl) {
+    public void updateUser(String nameRestaurant, String summary, String content, String address, String email, String avatar) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(managerRestaurantRepository::findOneByPhone)
             .ifPresent(user -> {
@@ -168,7 +168,7 @@ public class ManagerRestaurantService {
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
-                user.setImageUrl(imageUrl);
+                user.setAvatar(avatar);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for ManagerRestaurant: {}", user);
             });

@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -52,17 +53,17 @@ public class ManagerRestaurantDTO {
     private boolean isPartner=false;
 
     @Size(max = 256)
-    private String imageUrl;
+    private String avatar;
 
     private boolean activated = false;
 
     private String createdBy;
 
-    private Instant createdDate;
+    private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
-    private Instant lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
 
     public ManagerRestaurantDTO() {
@@ -80,7 +81,7 @@ public class ManagerRestaurantDTO {
         this.address = managerRestaurant.getAddress();
         this.status = managerRestaurant.isStatus();
         this.isPartner = managerRestaurant.isPartner();
-        this.imageUrl = managerRestaurant.getImageUrl();
+        this.avatar = managerRestaurant.getAvatar();
         this.activated = managerRestaurant.isActivated();
         this.createdBy = managerRestaurant.getCreatedBy();
         this.createdDate = managerRestaurant.getCreatedDate();

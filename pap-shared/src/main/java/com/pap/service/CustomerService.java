@@ -74,7 +74,7 @@ public class CustomerService {
                 if (customerDTO.getEmail() != null) {
                     user.setEmail(customerDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(customerDTO.getImageUrl());
+                user.setAvatar(customerDTO.getAvatar());
                 user.setActivated(customerDTO.isActivated());
                 this.clearUserCaches(user);
                 log.debug("Changed Information for Customer: {}", user);
@@ -99,7 +99,7 @@ public class CustomerService {
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
-                user.setImageUrl(imageUrl);
+                user.setAvatar(imageUrl);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for Customer: {}", user);
             });

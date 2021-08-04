@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "category")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@JsonIgnoreProperties(value = {"managerRestaurants"})
+@JsonIgnoreProperties(value = {"restaurants"})
 @Data
 public class Category extends AbstractAuditingEntity implements Serializable {
 
