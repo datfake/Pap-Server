@@ -99,6 +99,11 @@ public class CacheConfiguration {
             createCache(cm, CategoryItem.class.getName(), jcacheConfiguration);
             createCache(cm, OptionItem.class.getName(), jcacheConfiguration);
             createCache(cm, OptionItemChild.class.getName(), jcacheConfiguration);
+            createCache(cm, User.class.getName(), jcacheConfiguration);
+            createCache(cm, Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, com.pap.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, com.pap.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, com.pap.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }
