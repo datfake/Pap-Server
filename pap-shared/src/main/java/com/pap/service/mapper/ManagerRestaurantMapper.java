@@ -43,7 +43,7 @@ public class ManagerRestaurantMapper {
             managerRestaurant.setId(managerRestaurantDTO.getId());
             managerRestaurant.setPhone(managerRestaurantDTO.getPhone());
             managerRestaurant.setEmail(managerRestaurantDTO.getEmail());
-            managerRestaurant.setImageUrl(managerRestaurantDTO.getImageUrl());
+            managerRestaurant.setAvatar(managerRestaurantDTO.getAvatar());
             managerRestaurant.setActivated(managerRestaurantDTO.isActivated());
             return managerRestaurant;
         }

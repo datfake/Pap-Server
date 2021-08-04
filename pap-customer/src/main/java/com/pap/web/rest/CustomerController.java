@@ -67,7 +67,7 @@ public class CustomerController {
         if (!customer.isPresent() ) {
             throw new AccountResourceException("Người dùng không tồn tại");
         }
-        customerService.updateUser(customerDTO.getFullName(), customerDTO.getEmail(), customerDTO.getImageUrl());
+        customerService.updateUser(customerDTO.getFullName(), customerDTO.getEmail(), customerDTO.getAvatar());
         return new ResponseEntity("Thay đổi thông tin thành công", HttpStatus.OK);
     }
 }

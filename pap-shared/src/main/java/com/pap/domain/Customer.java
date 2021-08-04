@@ -1,6 +1,9 @@
 package com.pap.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
+import lombok.Data;
+import org.aspectj.weaver.ast.Or;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,13 +14,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A Manager Customer.
  */
 @Entity
+@Data
 @Table(name = "customer")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@JsonIgnoreProperties(value = {"orders"})
 public class Customer extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,61 +48,19 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
+    @Column(name = "address", length = 250)
+    private String address;
+
     @NotNull
     @Column(nullable = false)
     private boolean activated = false;
 
     @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
+    @Column(name = "avatar", length = 256)
+    private String avatar;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Order> orders = new LinkedHashSet<>(0);
 
     @Override
     public boolean equals(Object o) {
@@ -123,7 +88,7 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
             ", fullName='" + fullName + '\'' +
             ", email='" + email + '\'' +
             ", activated=" + activated +
-            ", imageUrl='" + imageUrl + '\'' +
+            ", avatar='" + avatar + '\'' +
             '}';
     }
 }

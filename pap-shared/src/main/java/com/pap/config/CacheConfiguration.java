@@ -1,8 +1,6 @@
 package com.pap.config;
 
-import com.pap.domain.Courier;
-import com.pap.domain.Customer;
-import com.pap.domain.ManagerRestaurant;
+import com.pap.domain.*;
 import com.pap.repository.CourierRepository;
 import com.pap.repository.CustomerRepository;
 import com.pap.repository.ManagerRestaurantRepository;
@@ -91,6 +89,21 @@ public class CacheConfiguration {
             createCache(cm, CourierRepository.USERS_BY_PHONE_CACHE, jcacheConfiguration);
             createCache(cm, CourierRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             createCache(cm, Courier.class.getName(), jcacheConfiguration);
+            createCache(cm, Category.class.getName(), jcacheConfiguration);
+            createCache(cm, Discount.class.getName(), jcacheConfiguration);
+            createCache(cm, Item.class.getName(), jcacheConfiguration);
+            createCache(cm, Order.class.getName(), jcacheConfiguration);
+            createCache(cm, OrderDetail.class.getName(), jcacheConfiguration);
+            createCache(cm, Review.class.getName(), jcacheConfiguration);
+            createCache(cm, Notice.class.getName(), jcacheConfiguration);
+            createCache(cm, CategoryItem.class.getName(), jcacheConfiguration);
+            createCache(cm, OptionItem.class.getName(), jcacheConfiguration);
+            createCache(cm, OptionItemChild.class.getName(), jcacheConfiguration);
+            createCache(cm, User.class.getName(), jcacheConfiguration);
+            createCache(cm, Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, com.pap.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, com.pap.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, com.pap.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }

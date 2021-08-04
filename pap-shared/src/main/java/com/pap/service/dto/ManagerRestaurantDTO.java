@@ -2,16 +2,17 @@ package com.pap.service.dto;
 
 import com.pap.config.Constants;
 import com.pap.domain.ManagerRestaurant;
+import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.validation.constraints.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * A DTO representing a user, with his authorities.
  */
+@Data
 public class ManagerRestaurantDTO {
 
     private String id;
@@ -26,18 +27,43 @@ public class ManagerRestaurantDTO {
     @Size(min = 5, max = 254)
     private String email;
 
+    @NotNull
+    @Column(name = "name_restaurant", length = 500)
+    private String nameRestaurant;
+
+    @Column(name = "summary")
+    private String summary;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "so_dkkd")
+    private String soDKKD;
+
+    @NotNull
+    @Column(name = "address")
+    private String address;
+
+    @NotNull
+    @Column(name = "status")
+    private boolean status = false;
+
+    @NotNull
+    @Column(name = "is_partner")
+    private boolean isPartner=false;
+
     @Size(max = 256)
-    private String imageUrl;
+    private String avatar;
 
     private boolean activated = false;
 
     private String createdBy;
 
-    private Instant createdDate;
+    private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
-    private Instant lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
 
     public ManagerRestaurantDTO() {
@@ -48,107 +74,18 @@ public class ManagerRestaurantDTO {
         this.phone = managerRestaurant.getPhone();
         this.fullName = managerRestaurant.getFullName();
         this.email = managerRestaurant.getEmail();
-        this.imageUrl = managerRestaurant.getImageUrl();
+        this.nameRestaurant = managerRestaurant.getNameRestaurant();
+        this.summary = managerRestaurant.getSummary();
+        this.content = managerRestaurant.getContent();
+        this.soDKKD = managerRestaurant.getSoDKKD();
+        this.address = managerRestaurant.getAddress();
+        this.status = managerRestaurant.isStatus();
+        this.isPartner = managerRestaurant.isPartner();
+        this.avatar = managerRestaurant.getAvatar();
         this.activated = managerRestaurant.isActivated();
         this.createdBy = managerRestaurant.getCreatedBy();
         this.createdDate = managerRestaurant.getCreatedDate();
         this.lastModifiedBy = managerRestaurant.getLastModifiedBy();
         this.lastModifiedDate = managerRestaurant.getLastModifiedDate();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    @Override
-    public String toString() {
-        return "ManagerRestaurantDTO{" +
-            "id='" + id + '\'' +
-            ", phone='" + phone + '\'' +
-            ", fullName='" + fullName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", createdBy='" + createdBy + '\'' +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            '}';
     }
 }

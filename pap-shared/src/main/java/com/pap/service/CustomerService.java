@@ -44,6 +44,18 @@ public class CustomerService {
             });
     }
 
+    public Customer registerCustomer(String numberPhone) {
+        Customer newCustomer = new Customer();
+        newCustomer.setPhone(numberPhone);
+        newCustomer.setActivated(true);
+        newCustomer.setCreatedBy("mine");
+        newCustomer.setLastModifiedBy("mine");
+        customerRepository.save(newCustomer);
+        // this.clearUserCaches(newCustomer);
+        log.debug("Tạo mới người dùng: {}", newCustomer);
+        return newCustomer;
+    }
+
     /**
      * Update all information for a specific user, and return the modified user.
      *
@@ -62,7 +74,7 @@ public class CustomerService {
                 if (customerDTO.getEmail() != null) {
                     user.setEmail(customerDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(customerDTO.getImageUrl());
+                user.setAvatar(customerDTO.getAvatar());
                 user.setActivated(customerDTO.isActivated());
                 this.clearUserCaches(user);
                 log.debug("Changed Information for Customer: {}", user);
@@ -87,7 +99,7 @@ public class CustomerService {
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
-                user.setImageUrl(imageUrl);
+                user.setAvatar(imageUrl);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for Customer: {}", user);
             });

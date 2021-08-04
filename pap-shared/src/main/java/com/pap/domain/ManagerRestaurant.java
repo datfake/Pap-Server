@@ -1,7 +1,11 @@
 package com.pap.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import net.bytebuddy.build.ToStringPlugin;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,13 +16,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A Manager Restaurant.
  */
 @Entity
 @Table(name = "manager_restaurant")
+@Data
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@JsonIgnoreProperties(value = {"categoryItems", "categories", "reviews", "discounts"})
 public class ManagerRestaurant extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,68 +58,102 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
     private String email;
 
     @NotNull
+    @Column(name = "name_restaurant", length = 500)
+    private String nameRestaurant;
+
+    @Column(name = "summary")
+    private String summary;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "so_dkkd")
+    private String soDKKD;
+
+    @NotNull
+    @Column(name = "address")
+    private String address;
+
+    @NotNull
+    @Column(name = "status")
+    private boolean status = false;
+
+    @NotNull
+    @Column(name = "is_partner")
+    private boolean isPartner=false;
+
+    @Column(name = "sharing")
+    private int sharing;
+
+    @NotNull
     @Column(nullable = false)
     private boolean activated = false;
 
     @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
+    @Column(name = "avatar", length = 256)
+    private String avatar;
 
-    public String getId() {
-        return id;
-    }
+    @NotNull
+    @Size(max = 256)
+    @Column(name = "image_restaurant", length = 256)
+    private String imageRestaurant;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @NotNull
+    @Column(name = "type_business")
+    private Constants.TypeBusiness typeBusiness;
 
-    public String getPhone() {
-        return phone;
-    }
+    @NotNull
+    @Size(max = 12)
+    @Column(name = "so_cmnd", length = 256)
+    private String soCmnd;
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    @NotNull
+    @Size(max = 256)
+    @Column(name = "image_first_cmnd", length = 256)
+    private String imageFirstCmnd;
 
-    public String getPassword() {
-        return password;
-    }
+    @NotNull
+    @Size(max = 256)
+    @Column(name = "image_last_cmnd", length = 256)
+    private String imageLastCmnd;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @NotNull
+    @Column(name = "date_cmnd")
+    private LocalDate dateCmnd;
 
-    public String getFullName() {
-        return fullName;
-    }
+    @NotNull
+    @Column(name = "bank_number", length = 20)
+    private String bankNumber;
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    @NotNull
+    @Column(name = "name_bank", length = 256)
+    private String nameBank;
 
-    public String getEmail() {
-        return email;
-    }
+    @NotNull
+    @Column(name = "full_name_bank", length = 256)
+    private String fullNameBank;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @NotNull
+    @Column(name = "branch_bank", length = 256)
+    private String branchBank;
 
-    public boolean isActivated() {
-        return activated;
-    }
+    @NotNull
+    @Column(name = "role")
+    private Constants.RoleManagerRestaurant roleManagerRestaurant;
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
+    @ManyToMany(mappedBy = "restaurants", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToStringPlugin.Exclude
+    private Set<Category> categories;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<CategoryItem> categoryItems = new LinkedHashSet<>(0);
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Review> reviews = new LinkedHashSet<>(0);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Discount> discounts = new LinkedHashSet<>(0);
 
     @Override
     public boolean equals(Object o) {
@@ -139,7 +182,7 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
             ", fullName='" + fullName + '\'' +
             ", email='" + email + '\'' +
             ", activated=" + activated +
-            ", imageUrl='" + imageUrl + '\'' +
+            ", avatar='" + avatar + '\'' +
             '}';
     }
 }

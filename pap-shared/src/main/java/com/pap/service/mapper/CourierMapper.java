@@ -43,8 +43,10 @@ public class CourierMapper {
             courier.setId(courierDTO.getId());
             courier.setPhone(courierDTO.getPhone());
             courier.setEmail(courierDTO.getEmail());
-            courier.setImageUrl(courierDTO.getImageUrl());
+            courier.setAvatar(courierDTO.getAvatar());
             courier.setActivated(courierDTO.isActivated());
+            courier.setLicensePlate(courierDTO.getLicensePlate());
+            courier.setSoCMND(courierDTO.getSoCMND());
             return courier;
         }
     }
