@@ -47,6 +47,13 @@ spring:
     database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
     hibernate.ddl-auto: update
     show-sql: true
+  flyway:
+    enabled: true
+    user: postgres
+    password: 123456
+    url: jdbc:postgresql://localhost:5432/pap_server
+    locations: classpath:/db/migration,/db/data/migration
+    baselineOnMigrate: true
   mail:
     host: localhost
     port: 25
