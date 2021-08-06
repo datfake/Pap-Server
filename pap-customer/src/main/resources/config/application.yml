@@ -131,7 +131,7 @@ info:
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-jhipster:
+pap:
   clientApp:
     name: 'customerServerApp'
   # By default CORS is disabled. Uncomment to enable.

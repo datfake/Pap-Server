@@ -1,13 +1,17 @@
 package com.pap.service;
 
 import com.pap.config.Constants;
+import com.pap.domain.Category;
 import com.pap.domain.ManagerRestaurant;
 import com.pap.exception.InvalidPasswordException;
 import com.pap.exception.NumberPhoneAlreadyUsedException;
+import com.pap.repository.CategoryRepository;
 import com.pap.repository.ManagerRestaurantRepository;
 import com.pap.security.SecurityUtils;
 import com.pap.service.dto.ManagerRestaurantDTO;
-import io.github.jhipster.security.RandomUtil;
+import com.pap.service.dto.ManagerRestaurantVM;
+import com.pap.service.dto.UserDTO;
+import io.netty.util.AsyncMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -17,13 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
-/**
- * Service class for managing users.
- */
 @Service
 @Transactional
 public class ManagerRestaurantService {
@@ -32,12 +34,15 @@ public class ManagerRestaurantService {
 
     private final ManagerRestaurantRepository managerRestaurantRepository;
 
+    private final CategoryRepository categoryRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final CacheManager cacheManager;
 
-    public ManagerRestaurantService(ManagerRestaurantRepository managerRestaurantRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
+    public ManagerRestaurantService(ManagerRestaurantRepository managerRestaurantRepository, CategoryRepository categoryRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
         this.managerRestaurantRepository = managerRestaurantRepository;
+        this.categoryRepository = categoryRepository;
         this.passwordEncoder = passwordEncoder;
         this.cacheManager = cacheManager;
     }
@@ -95,6 +100,11 @@ public class ManagerRestaurantService {
         return newManagerRestaurant;
     }
 
+    @Transactional(readOnly = true)
+    public Page<ManagerRestaurantDTO> getAllManagedUsers(Pageable pageable) {
+        return managerRestaurantRepository.findAllByPhoneNot(pageable, Constants.ANONYMOUS_USER).map(ManagerRestaurantDTO::new);
+    }
+
     private boolean removeNonActivatedUser(ManagerRestaurant existingManagerRestaurant) {
         if (existingManagerRestaurant.isActivated()) {
             return false;
@@ -105,59 +115,99 @@ public class ManagerRestaurantService {
         return true;
     }
 
-    public ManagerRestaurant createUser(ManagerRestaurantDTO managerRestaurantDTO) {
+    public ManagerRestaurant createManagerRestaurant(ManagerRestaurantVM managerRestaurantVM) {
         ManagerRestaurant managerRestaurant = new ManagerRestaurant();
-        managerRestaurant.setPhone(managerRestaurantDTO.getPhone());
-        managerRestaurant.setFullName(managerRestaurantDTO.getFullName());
-        if (managerRestaurantDTO.getEmail() != null) {
-            managerRestaurant.setEmail(managerRestaurantDTO.getEmail().toLowerCase());
+        managerRestaurant.setPhone(managerRestaurantVM.getPhone());
+        managerRestaurant.setFullName(managerRestaurantVM.getFullName());
+        if (managerRestaurantVM.getEmail() != null) {
+            managerRestaurant.setEmail(managerRestaurantVM.getEmail().toLowerCase());
         }
-        managerRestaurant.setAvatar(managerRestaurantDTO.getAvatar());
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        managerRestaurant.setNameRestaurant(managerRestaurantVM.getNameRestaurant());
+        managerRestaurant.setSummary(managerRestaurantVM.getSummary());
+        managerRestaurant.setContent(managerRestaurantVM.getContent());
+        managerRestaurant.setSoDKKD(managerRestaurantVM.getSoDKKD());
+        managerRestaurant.setAddress(managerRestaurantVM.getAddress());
+        managerRestaurant.setPartner(managerRestaurantVM.isPartner());
+        managerRestaurant.setSharing(managerRestaurantVM.getSharing());
+        managerRestaurant.setImageRestaurant(managerRestaurantVM.getImageRestaurant());
+        managerRestaurant.setAvatar(managerRestaurantVM.getAvatar());
+        managerRestaurant.setTypeBusiness(managerRestaurantVM.getTypeBusiness());
+        managerRestaurant.setSoCMND(managerRestaurantVM.getSoCMND());
+        managerRestaurant.setImageFirstCMND(managerRestaurantVM.getImageFirstCMND());
+        managerRestaurant.setImageLastCMND(managerRestaurantVM.getImageLastCMND());
+        managerRestaurant.setSoCCCD(managerRestaurantVM.getSoCCCD());
+        managerRestaurant.setImageFirstCCCD(managerRestaurantVM.getImageFirstCCCD());
+        managerRestaurant.setImageLastCCCD(managerRestaurantVM.getImageLastCCCD());
+        managerRestaurant.setDateCMND(managerRestaurantVM.getDateCMND());
+        managerRestaurant.setBankNumber(managerRestaurantVM.getBankNumber());
+        managerRestaurant.setNameBank(managerRestaurantVM.getNameBank());
+        managerRestaurant.setFullNameBank(managerRestaurantVM.getFullNameBank());
+        managerRestaurant.setBranchBank(managerRestaurantVM.getBranchBank());
+        managerRestaurant.setRoleManagerRestaurant(managerRestaurantVM.getRoleManagerRestaurant());
+        String encryptedPassword = passwordEncoder.encode(managerRestaurantVM.getPassword());
         managerRestaurant.setPassword(encryptedPassword);
         managerRestaurant.setActivated(true);
+        Set<Category> categorySet = new HashSet<>();
+        for(String code:managerRestaurantVM.getCategories()) {
+            categorySet.add(categoryRepository.findByCode(code));
+        }
+        managerRestaurant.setCategories(categorySet);
         managerRestaurantRepository.save(managerRestaurant);
         this.clearUserCaches(managerRestaurant);
         log.debug("Created Information for ManagerRestaurant: {}", managerRestaurant);
         return managerRestaurant;
     }
 
-    /**
-     * Update all information for a specific user, and return the modified user.
-     *
-     * @param managerRestaurantDTO user to update.
-     * @return updated user.
-     */
-    public Optional<ManagerRestaurantDTO> updateUser(ManagerRestaurantDTO managerRestaurantDTO) {
+    public Optional<ManagerRestaurantDTO> updateManagerRestaurant(ManagerRestaurantDTO managerRestaurantDTO) {
         return Optional.of(managerRestaurantRepository
             .findById(managerRestaurantDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(user -> {
-                this.clearUserCaches(user);
-                user.setPhone(managerRestaurantDTO.getPhone());
-                user.setFullName(managerRestaurantDTO.getFullName());
+            .map(managerRestaurant -> {
+                this.clearUserCaches(managerRestaurant);
+                managerRestaurant.setPhone(managerRestaurantDTO.getPhone());
+                managerRestaurant.setFullName(managerRestaurantDTO.getFullName());
                 if (managerRestaurantDTO.getEmail() != null) {
-                    user.setEmail(managerRestaurantDTO.getEmail().toLowerCase());
+                    managerRestaurant.setEmail(managerRestaurantDTO.getEmail().toLowerCase());
                 }
-                user.setAvatar(managerRestaurantDTO.getAvatar());
-                user.setActivated(managerRestaurantDTO.isActivated());
-                this.clearUserCaches(user);
-                log.debug("Changed Information for ManagerRestaurant: {}", user);
-                return user;
+                managerRestaurant.setNameRestaurant(managerRestaurantDTO.getNameRestaurant());
+                managerRestaurant.setSummary(managerRestaurantDTO.getSummary());
+                managerRestaurant.setContent(managerRestaurantDTO.getContent());
+                managerRestaurant.setSoDKKD(managerRestaurantDTO.getSoDKKD());
+                managerRestaurant.setAddress(managerRestaurantDTO.getAddress());
+                managerRestaurant.setPartner(managerRestaurantDTO.isPartner());
+                managerRestaurant.setSharing(managerRestaurantDTO.getSharing());
+                managerRestaurant.setImageRestaurant(managerRestaurantDTO.getImageRestaurant());
+                managerRestaurant.setAvatar(managerRestaurantDTO.getAvatar());
+                managerRestaurant.setTypeBusiness(managerRestaurantDTO.getTypeBusiness());
+                managerRestaurant.setSoCMND(managerRestaurantDTO.getSoCMND());
+                managerRestaurant.setImageFirstCMND(managerRestaurantDTO.getImageFirstCMND());
+                managerRestaurant.setImageLastCMND(managerRestaurantDTO.getImageLastCMND());
+                managerRestaurant.setSoCCCD(managerRestaurantDTO.getSoCCCD());
+                managerRestaurant.setImageFirstCCCD(managerRestaurantDTO.getImageFirstCCCD());
+                managerRestaurant.setImageLastCCCD(managerRestaurantDTO.getImageLastCCCD());
+                managerRestaurant.setDateCMND(managerRestaurantDTO.getDateCMND());
+                managerRestaurant.setBankNumber(managerRestaurantDTO.getBankNumber());
+                managerRestaurant.setNameBank(managerRestaurantDTO.getNameBank());
+                managerRestaurant.setFullNameBank(managerRestaurantDTO.getFullNameBank());
+                managerRestaurant.setBranchBank(managerRestaurantDTO.getBranchBank());
+                managerRestaurant.setRoleManagerRestaurant(managerRestaurantDTO.getRoleManagerRestaurant());
+                this.clearUserCaches(managerRestaurant);
+                log.debug("Changed Information for ManagerRestaurant: {}", managerRestaurant);
+                return managerRestaurant;
             })
             .map(ManagerRestaurantDTO::new);
     }
 
-    public void deleteUser(String login) {
-        managerRestaurantRepository.findOneByPhone(login).ifPresent(user -> {
+    public void deleteManagerRestaurant(String phone) {
+        managerRestaurantRepository.findOneByPhone(phone).ifPresent(user -> {
             managerRestaurantRepository.delete(user);
             this.clearUserCaches(user);
             log.debug("Deleted ManagerRestaurant: {}", user);
         });
     }
 
-    public void updateUser(String nameRestaurant, String summary, String content, String address, String email, String avatar) {
+    public void updateManagerRestaurant(String nameRestaurant, String summary, String content, String address, String email, String avatar) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(managerRestaurantRepository::findOneByPhone)
             .ifPresent(user -> {
@@ -197,5 +247,9 @@ public class ManagerRestaurantService {
         if (managerRestaurant.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(ManagerRestaurantRepository.USERS_BY_EMAIL_CACHE)).evict(managerRestaurant.getEmail());
         }
+    }
+
+    public Optional<ManagerRestaurant> getAccountRestaurantByPhone(String phone) {
+        return managerRestaurantRepository.findOneByPhone(phone);
     }
 }

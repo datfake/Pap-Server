@@ -1,12 +1,13 @@
-package com.pap.web.rest.vm;
+package com.pap.service.dto;
 
-import com.pap.service.dto.CourierDTO;
+import com.pap.service.dto.ManagerRestaurantDTO;
+
 import javax.validation.constraints.Size;
 
 /**
- * View Model extending the CourierDTO, which is meant to be used in the user management UI.
+ * View Model extending the ManagerRestaurantDTO, which is meant to be used in the user management UI.
  */
-public class ManagedUserVM extends CourierDTO {
+public class ManagerRestaurantVM extends ManagerRestaurantDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
 
@@ -15,7 +16,7 @@ public class ManagedUserVM extends CourierDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    public ManagedUserVM() {
+    public ManagerRestaurantVM() {
         // Empty constructor needed for Jackson.
     }
 
@@ -30,6 +31,6 @@ public class ManagedUserVM extends CourierDTO {
     // prettier-ignore
     @Override
     public String toString() {
-        return "ManagedUserVM{" + super.toString() + "} ";
+        return "ManagerRestaurantVM{" + super.toString() + "} ";
     }
 }

@@ -43,10 +43,24 @@ public class CourierMapper {
             courier.setId(courierDTO.getId());
             courier.setPhone(courierDTO.getPhone());
             courier.setEmail(courierDTO.getEmail());
-            courier.setAvatar(courierDTO.getAvatar());
-            courier.setActivated(courierDTO.isActivated());
-            courier.setLicensePlate(courierDTO.getLicensePlate());
+            courier.setAddress(courierDTO.getAddress());
             courier.setSoCMND(courierDTO.getSoCMND());
+            courier.setImageFirstCCCD(courierDTO.getImageFirstCMND());
+            courier.setImageLastCMND(courierDTO.getImageLastCMND());
+            courier.setSoCCCD(courierDTO.getSoCCCD());
+            courier.setImageFirstCCCD(courierDTO.getImageFirstCCCD());
+            courier.setImageLastCMND(courierDTO.getImageLastCCCD());
+            courier.setDateCMND(courierDTO.getDateCMND());
+            courier.setBankNumber(courierDTO.getBankNumber());
+            courier.setNameBank(courierDTO.getNameBank());
+            courier.setFullNameBank(courierDTO.getFullNameBank());
+            courier.setBranchBank(courierDTO.getBranchBank());
+            courier.setAvatar(courierDTO.getAvatar());
+            courier.setLicensePlate(courierDTO.getLicensePlate());
+            courier.setImageGPLX(courierDTO.getImageGPLX());
+            courier.setImageCavet(courierDTO.getImageCavet());
+            courier.setImageMotorbike(courierDTO.getImageMotorbike());
+            courier.setActivated(courierDTO.isActivated());
             return courier;
         }
     }

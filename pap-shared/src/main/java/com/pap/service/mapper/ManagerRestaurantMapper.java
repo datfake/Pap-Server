@@ -8,12 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Mapper for the entity {@link ManagerRestaurant} and its DTO called {@link ManagerRestaurantDTO}.
- *
- * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
- * support is still in beta, and requires a manual step with an IDE.
- */
 @Service
 public class ManagerRestaurantMapper {
 
@@ -43,7 +37,28 @@ public class ManagerRestaurantMapper {
             managerRestaurant.setId(managerRestaurantDTO.getId());
             managerRestaurant.setPhone(managerRestaurantDTO.getPhone());
             managerRestaurant.setEmail(managerRestaurantDTO.getEmail());
+            managerRestaurant.setNameRestaurant(managerRestaurantDTO.getNameRestaurant());
+            managerRestaurant.setSummary(managerRestaurantDTO.getSummary());
+            managerRestaurant.setContent(managerRestaurantDTO.getContent());
+            managerRestaurant.setSoDKKD(managerRestaurantDTO.getSoDKKD());
+            managerRestaurant.setAddress(managerRestaurantDTO.getAddress());
+            managerRestaurant.setPartner(managerRestaurantDTO.isPartner());
+            managerRestaurant.setSharing(managerRestaurantDTO.getSharing());
+            managerRestaurant.setImageRestaurant(managerRestaurantDTO.getImageRestaurant());
             managerRestaurant.setAvatar(managerRestaurantDTO.getAvatar());
+            managerRestaurant.setTypeBusiness(managerRestaurantDTO.getTypeBusiness());
+            managerRestaurant.setSoCMND(managerRestaurantDTO.getSoCMND());
+            managerRestaurant.setImageFirstCMND(managerRestaurantDTO.getImageFirstCMND());
+            managerRestaurant.setImageLastCMND(managerRestaurantDTO.getImageLastCMND());
+            managerRestaurant.setSoCCCD(managerRestaurantDTO.getSoCCCD());
+            managerRestaurant.setImageFirstCCCD(managerRestaurantDTO.getImageFirstCCCD());
+            managerRestaurant.setImageLastCCCD(managerRestaurantDTO.getImageLastCCCD());
+            managerRestaurant.setDateCMND(managerRestaurantDTO.getDateCMND());
+            managerRestaurant.setBankNumber(managerRestaurantDTO.getBankNumber());
+            managerRestaurant.setNameBank(managerRestaurantDTO.getNameBank());
+            managerRestaurant.setFullNameBank(managerRestaurantDTO.getFullNameBank());
+            managerRestaurant.setBranchBank(managerRestaurantDTO.getBranchBank());
+            managerRestaurant.setRoleManagerRestaurant(managerRestaurantDTO.getRoleManagerRestaurant());
             managerRestaurant.setActivated(managerRestaurantDTO.isActivated());
             return managerRestaurant;
         }

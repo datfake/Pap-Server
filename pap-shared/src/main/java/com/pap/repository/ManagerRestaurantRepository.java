@@ -22,7 +22,7 @@ public interface ManagerRestaurantRepository extends JpaRepository<ManagerRestau
 
     Optional<ManagerRestaurant> findOneByEmailIgnoreCase(String email);
 
-    Optional<ManagerRestaurant> findOneByPhone(String login);
+    Optional<ManagerRestaurant> findOneByPhone(String phone);
 
-    Page<ManagerRestaurant> findAllByPhoneNot(Pageable pageable, String login);
+    Page<ManagerRestaurant> findAllByPhoneNot(Pageable pageable, String phone);
 }
