@@ -1,11 +1,15 @@
 package com.pap.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.config.Constants;
 import com.pap.domain.ManagerRestaurant;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import static com.pap.domain.AbstractAuditingEntity.DATE_PATTERN;
+import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
 
 /**
  * A DTO representing a ManagerRestaurantDTO, with his authorities.
@@ -31,6 +35,8 @@ public class ManagerRestaurantDTO {
     private String soDKKD;
 
     private String address;
+
+    private float rate;
 
     private boolean status;
 
@@ -58,6 +64,7 @@ public class ManagerRestaurantDTO {
 
     private String imageLastCCCD;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
     private LocalDate dateCMND;
 
     private String bankNumber;
@@ -74,10 +81,12 @@ public class ManagerRestaurantDTO {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime lastModifiedDate;
 
 
@@ -94,6 +103,7 @@ public class ManagerRestaurantDTO {
         this.content = managerRestaurant.getContent();
         this.soDKKD = managerRestaurant.getSoDKKD();
         this.address = managerRestaurant.getAddress();
+        this.rate = managerRestaurant.getRate();
         this.status = managerRestaurant.isStatus();
         this.isPartner = managerRestaurant.isPartner();
         this.sharing = managerRestaurant.getSharing();

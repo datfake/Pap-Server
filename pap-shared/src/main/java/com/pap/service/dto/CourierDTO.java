@@ -1,5 +1,6 @@
 package com.pap.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.domain.Courier;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static com.pap.domain.AbstractAuditingEntity.DATE_PATTERN;
+import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -40,6 +44,7 @@ public class CourierDTO {
 
     private String imageLastCCCD;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
     private LocalDate dateCMND;
 
     private String bankNumber;
@@ -64,10 +69,12 @@ public class CourierDTO {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime lastModifiedDate;
 
     public CourierDTO(Courier courier) {

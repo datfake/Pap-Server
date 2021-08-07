@@ -1,26 +1,29 @@
 package com.pap.web.rest;
 
+import com.pap.domain.Discount;
 import com.pap.domain.ManagerRestaurant;
-import com.pap.exception.EmailAlreadyUsedException;
+import com.pap.exception.BadRequestAlertException;
 import com.pap.exception.InvalidPasswordException;
-import com.pap.exception.NumberPhoneAlreadyUsedException;
 import com.pap.repository.ManagerRestaurantRepository;
-import com.pap.security.SecurityUtils;
+import com.pap.service.DiscountService;
 import com.pap.service.MailService;
 import com.pap.service.ManagerRestaurantService;
 import com.pap.service.SmsService;
-import com.pap.service.dto.ManagerRestaurantDTO;
+import com.pap.service.dto.DiscountDTO;
 import com.pap.service.dto.ManagerRestaurantVM;
 import com.pap.service.dto.PasswordChangeDTO;
+import io.github.jhipster.web.util.HeaderUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
@@ -29,6 +32,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class ManagerRestaurantController {
+
+    @Value("${pap.clientApp.name}")
+    private String applicationName;
 
     private static class AccountResourceException extends RuntimeException {
         private AccountResourceException(String message) {
@@ -42,11 +48,14 @@ public class ManagerRestaurantController {
 
     private final ManagerRestaurantService managerRestaurantService;
 
+    private final DiscountService discountService;
+
     private final SmsService smsService;
 
-    public ManagerRestaurantController(ManagerRestaurantRepository managerRestaurantRepository, ManagerRestaurantService managerRestaurantService, MailService mailService, SmsService smsService) {
+    public ManagerRestaurantController(ManagerRestaurantRepository managerRestaurantRepository, ManagerRestaurantService managerRestaurantService, MailService mailService, DiscountService discountService, SmsService smsService) {
         this.managerRestaurantRepository = managerRestaurantRepository;
         this.managerRestaurantService = managerRestaurantService;
+        this.discountService = discountService;
         this.smsService = smsService;
     }
 
@@ -98,6 +107,17 @@ public class ManagerRestaurantController {
             // but log that an invalid attempt has been made
             log.warn("Password reset requested for non existing mail");
         }
+    }
+
+    @PostMapping(path = "/discount")
+    public ResponseEntity<Discount> createDiscount(@RequestBody DiscountDTO discountDTO) throws URISyntaxException {
+        if (discountDTO.getId() != null) {
+            throw new BadRequestAlertException("A new Discount cannot already have an ID", "discount", "idexists");
+        }
+        Discount discount = discountService.createDiscount(discountDTO);
+        return ResponseEntity.created(new URI("/api/discount/" + discount.getCode()))
+            .headers(HeaderUtil.createAlert(applicationName,  "A courier is created with identifier " + discount.getCode(), discount.getCode()))
+            .body(discount);
     }
 
     private static boolean checkPasswordLength(String password) {

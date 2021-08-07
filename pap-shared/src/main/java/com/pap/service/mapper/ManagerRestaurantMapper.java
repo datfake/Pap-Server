@@ -42,6 +42,7 @@ public class ManagerRestaurantMapper {
             managerRestaurant.setContent(managerRestaurantDTO.getContent());
             managerRestaurant.setSoDKKD(managerRestaurantDTO.getSoDKKD());
             managerRestaurant.setAddress(managerRestaurantDTO.getAddress());
+            managerRestaurant.setRate(managerRestaurantDTO.getRate());
             managerRestaurant.setPartner(managerRestaurantDTO.isPartner());
             managerRestaurant.setSharing(managerRestaurantDTO.getSharing());
             managerRestaurant.setImageRestaurant(managerRestaurantDTO.getImageRestaurant());

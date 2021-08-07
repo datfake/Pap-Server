@@ -25,7 +25,9 @@ import javax.persistence.*;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditingEntity implements Serializable {
 
-    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
+
+    public static final String DATE_PATTERN = "dd-MM-yyyy";
 
     private static final long serialVersionUID = 1L;
 

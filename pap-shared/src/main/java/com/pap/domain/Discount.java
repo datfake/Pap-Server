@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Discount extends AbstractAuditingEntity implements Serializable {
 
-    public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -41,11 +39,12 @@ public class Discount extends AbstractAuditingEntity implements Serializable {
     @Column(name = "content", length = 1000)
     private String content;
 
-    @NotNull
     @Column(name = "price")
     private BigDecimal price;
 
-    @NotNull
+    @Column(name = "sale")
+    private int sale;
+
     @Column(name = "min_order_price")
     private BigDecimal minOrderPrice;
 
@@ -69,14 +68,16 @@ public class Discount extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private ManagerRestaurant restaurant;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATETIME_PATTERN)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "from_date", length = 50)
     private LocalDateTime fromDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATETIME_PATTERN)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "to_date", length = 50)
     private LocalDateTime toDate;
 
+    @Column(name = "is_deleted")
+    private short isDeleted = 0;
 }

@@ -1,5 +1,7 @@
 package com.pap.web.rest.vm;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -8,9 +10,10 @@ import javax.validation.constraints.Size;
  */
 public class LoginVM {
 
-    @NotNull
-    @Size(min = 1, max = 50)
-    private String phone;
+    @Email
+    @Size(min = 5, max = 254)
+    @Column(length = 254, unique = true)
+    private String email;
 
     @NotNull
     @Size(min = 4, max = 100)
@@ -18,12 +21,12 @@ public class LoginVM {
 
     private Boolean rememberMe;
 
-    public String getPhone() {
-        return phone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -47,7 +50,6 @@ public class LoginVM {
     @Override
     public String toString() {
         return "LoginVM{" +
-            "phone='" + phone + '\'' +
             ", password='" + password + '\'' +
             ", rememberMe=" + rememberMe +
             '}';

@@ -1,5 +1,6 @@
 package com.pap.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.config.Constants;
 import com.pap.domain.Customer;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.Data;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
+
+import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -32,10 +35,12 @@ public class CustomerDTO {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime lastModifiedDate;
 
 

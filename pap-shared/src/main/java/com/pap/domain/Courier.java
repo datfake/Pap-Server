@@ -1,5 +1,6 @@
 package com.pap.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
@@ -81,6 +82,7 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     @Column(name = "image_last_cccd", length = 256)
     private String imageLastCCCD;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
     @Column(name = "date_cmnd")
     private LocalDate dateCMND;
 

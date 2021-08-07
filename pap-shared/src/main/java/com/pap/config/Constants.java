@@ -19,7 +19,7 @@ public final class Constants {
     }
 
     public enum OrderStatus {
-        DANGCHON, DAHUY, CHUACOSHIP, DAGIAO, DANGGIAO
+        DANGCHON, DAHUY, CHUACOSHIP, DANGLAM, DAGIAO, DANGGIAO
     }
 
     public enum TypeBusiness {

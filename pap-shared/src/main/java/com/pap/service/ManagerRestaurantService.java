@@ -10,8 +10,6 @@ import com.pap.repository.ManagerRestaurantRepository;
 import com.pap.security.SecurityUtils;
 import com.pap.service.dto.ManagerRestaurantDTO;
 import com.pap.service.dto.ManagerRestaurantVM;
-import com.pap.service.dto.UserDTO;
-import io.netty.util.AsyncMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
