@@ -1,6 +1,7 @@
 package com.pap.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pap.domain.Discount;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class DiscountDTO {
     private String content;
     private BigDecimal price;
     private int sale;
-    private String restaurantId;
+    private String restaurantEmail;
     private BigDecimal minOrderPrice;
     private int quantity;
     private int quantityDay;
@@ -30,4 +31,19 @@ public class DiscountDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime toDate;
+
+    public DiscountDTO(Discount discount) {
+        this.id = discount.getId();
+        this.code = discount.getCode();
+        this.title = discount.getTitle();
+        this.content = discount.getContent();
+        this.price = discount.getPrice();
+        this.sale = discount.getSale();
+        this.minOrderPrice = discount.getMinOrderPrice();
+        this.quantity = discount.getQuantity();
+        this.quantityDay = discount.getQuantityDay();
+        this.quantityCustomer = discount.getQuantityCustomer();
+        this.quantityCustomerDay = discount.getQuantityCustomerDay();
+        this.imageUrl = discount.getImageUrl();
+    }
 }

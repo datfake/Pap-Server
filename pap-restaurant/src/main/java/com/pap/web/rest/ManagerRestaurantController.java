@@ -1,14 +1,14 @@
 package com.pap.web.rest;
 
+import com.pap.domain.CategoryItem;
 import com.pap.domain.Discount;
 import com.pap.domain.ManagerRestaurant;
 import com.pap.exception.BadRequestAlertException;
 import com.pap.exception.InvalidPasswordException;
 import com.pap.repository.ManagerRestaurantRepository;
-import com.pap.service.DiscountService;
-import com.pap.service.MailService;
-import com.pap.service.ManagerRestaurantService;
-import com.pap.service.SmsService;
+import com.pap.security.SecurityUtils;
+import com.pap.service.*;
+import com.pap.service.dto.CategoryItemDTO;
 import com.pap.service.dto.DiscountDTO;
 import com.pap.service.dto.ManagerRestaurantVM;
 import com.pap.service.dto.PasswordChangeDTO;
@@ -50,12 +50,15 @@ public class ManagerRestaurantController {
 
     private final DiscountService discountService;
 
+    private final CategoryItemService categoryItemService;
+
     private final SmsService smsService;
 
-    public ManagerRestaurantController(ManagerRestaurantRepository managerRestaurantRepository, ManagerRestaurantService managerRestaurantService, MailService mailService, DiscountService discountService, SmsService smsService) {
+    public ManagerRestaurantController(ManagerRestaurantRepository managerRestaurantRepository, ManagerRestaurantService managerRestaurantService, MailService mailService, DiscountService discountService, CategoryItemService categoryItemService, SmsService smsService) {
         this.managerRestaurantRepository = managerRestaurantRepository;
         this.managerRestaurantService = managerRestaurantService;
         this.discountService = discountService;
+        this.categoryItemService = categoryItemService;
         this.smsService = smsService;
     }
 
@@ -111,13 +114,28 @@ public class ManagerRestaurantController {
 
     @PostMapping(path = "/discount")
     public ResponseEntity<Discount> createDiscount(@RequestBody DiscountDTO discountDTO) throws URISyntaxException {
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Manager restaurant email not found"));
+        discountDTO.setRestaurantEmail(email);
         if (discountDTO.getId() != null) {
             throw new BadRequestAlertException("A new Discount cannot already have an ID", "discount", "idexists");
         }
         Discount discount = discountService.createDiscount(discountDTO);
         return ResponseEntity.created(new URI("/api/discount/" + discount.getCode()))
-            .headers(HeaderUtil.createAlert(applicationName,  "A courier is created with identifier " + discount.getCode(), discount.getCode()))
+            .headers(HeaderUtil.createAlert(applicationName,  "A courier is created with identifier " + discount.getId(), discount.getCode()))
             .body(discount);
+    }
+
+    @PostMapping(path = "/category-item")
+    public ResponseEntity<CategoryItem> createCategoryItem(@RequestBody CategoryItemDTO categoryItemDTO) throws URISyntaxException {
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Manager restaurant email not found"));
+        categoryItemDTO.setRestaurantEmail(email);
+        if (categoryItemDTO.getId() != null) {
+            throw new BadRequestAlertException("A new CategoryItem cannot already have an ID", "discount", "idexists");
+        }
+        CategoryItem categoryItem = categoryItemService.createCategoryItem(categoryItemDTO);
+        return ResponseEntity.created(new URI("/api/category-item/" + categoryItem.getName()))
+                .headers(HeaderUtil.createAlert(applicationName,  "A CategoryItem is created with identifier " + categoryItem.getId(), categoryItem.getName()))
+                .body(categoryItem);
     }
 
     private static boolean checkPasswordLength(String password) {

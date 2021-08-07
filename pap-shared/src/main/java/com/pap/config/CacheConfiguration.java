@@ -101,6 +101,8 @@ public class CacheConfiguration {
             createCache(cm, OptionItemChild.class.getName(), jcacheConfiguration);
             createCache(cm, User.class.getName(), jcacheConfiguration);
             createCache(cm, Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, OrderCancelled.class.getName(), jcacheConfiguration);
+            createCache(cm, ScheduleRestaurant.class.getName(), jcacheConfiguration);
             createCache(cm, com.pap.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             createCache(cm, com.pap.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             createCache(cm, com.pap.domain.User.class.getName() + ".authorities", jcacheConfiguration);

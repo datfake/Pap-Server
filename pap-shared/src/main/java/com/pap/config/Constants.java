@@ -30,6 +30,10 @@ public final class Constants {
         CHUCUAHANG, GIAMDOC, QUANLY, NGUOIUYQUYEN
     }
 
+    public enum TypeUser {
+        ADMIN, QUANLYQUANAN, COURIER, CUSTOMER
+    }
+
     private Constants() {
     }
 }
