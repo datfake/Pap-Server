@@ -1,12 +1,14 @@
 package com.pap.domain;
 
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "complain")
+@Data
 public class Complain extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
