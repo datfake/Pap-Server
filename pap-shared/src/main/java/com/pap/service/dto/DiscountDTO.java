@@ -2,7 +2,9 @@ package com.pap.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.domain.Discount;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiscountDTO {
 
     private String id;

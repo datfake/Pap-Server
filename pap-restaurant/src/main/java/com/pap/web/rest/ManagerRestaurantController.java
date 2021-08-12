@@ -1,17 +1,12 @@
 package com.pap.web.rest;
 
-import com.pap.domain.CategoryItem;
-import com.pap.domain.Discount;
-import com.pap.domain.ManagerRestaurant;
+import com.pap.domain.*;
 import com.pap.exception.BadRequestAlertException;
 import com.pap.exception.InvalidPasswordException;
 import com.pap.repository.ManagerRestaurantRepository;
 import com.pap.security.SecurityUtils;
 import com.pap.service.*;
-import com.pap.service.dto.CategoryItemDTO;
-import com.pap.service.dto.DiscountDTO;
-import com.pap.service.dto.ManagerRestaurantVM;
-import com.pap.service.dto.PasswordChangeDTO;
+import com.pap.service.dto.*;
 import io.github.jhipster.web.util.HeaderUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -52,13 +47,22 @@ public class ManagerRestaurantController {
 
     private final CategoryItemService categoryItemService;
 
+    private final ItemService itemService;
+
+    private final OptionItemService optionItemService;
+
+    private final OptionItemChildService optionItemChildService;
+
     private final SmsService smsService;
 
-    public ManagerRestaurantController(ManagerRestaurantRepository managerRestaurantRepository, ManagerRestaurantService managerRestaurantService, MailService mailService, DiscountService discountService, CategoryItemService categoryItemService, SmsService smsService) {
+    public ManagerRestaurantController(ManagerRestaurantRepository managerRestaurantRepository, ManagerRestaurantService managerRestaurantService, MailService mailService, DiscountService discountService, CategoryItemService categoryItemService, ItemService itemService, OptionItemService optionItemService, OptionItemChildService optionItemChildService, SmsService smsService) {
         this.managerRestaurantRepository = managerRestaurantRepository;
         this.managerRestaurantService = managerRestaurantService;
         this.discountService = discountService;
         this.categoryItemService = categoryItemService;
+        this.itemService = itemService;
+        this.optionItemService = optionItemService;
+        this.optionItemChildService = optionItemChildService;
         this.smsService = smsService;
     }
 
@@ -133,9 +137,45 @@ public class ManagerRestaurantController {
             throw new BadRequestAlertException("A new CategoryItem cannot already have an ID", "discount", "idexists");
         }
         CategoryItem categoryItem = categoryItemService.createCategoryItem(categoryItemDTO);
-        return ResponseEntity.created(new URI("/api/category-item/" + categoryItem.getName()))
+        return ResponseEntity.created(new URI("/api/category-item"))
                 .headers(HeaderUtil.createAlert(applicationName,  "A CategoryItem is created with identifier " + categoryItem.getId(), categoryItem.getName()))
                 .body(categoryItem);
+    }
+
+    @PostMapping(path = "/item")
+    public ResponseEntity<Object> createItem(@RequestBody ItemDTO itemDTO) throws URISyntaxException {
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Manager restaurant email not found"));
+        if (!email.equalsIgnoreCase(itemDTO.getRestaurantEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ban khong co quyen them noi dung nay!");
+        }
+        Item item = itemService.createItem(itemDTO);
+        return ResponseEntity.created(new URI("/api/item"))
+                .headers(HeaderUtil.createAlert(applicationName,  "A Item is created with identifier " + item.getId(), item.getName()))
+                .body(item);
+    }
+
+    @PostMapping(path = "/option-item")
+    public ResponseEntity<Object> createOptionItem(@RequestBody OptionItemDTO optionItemDTO) throws URISyntaxException {
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Manager restaurant email not found"));
+        if (!email.equalsIgnoreCase(optionItemDTO.getRestaurantEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ban khong co quyen them noi dung nay!");
+        }
+        OptionItem optionItem = optionItemService.createOptionItem(optionItemDTO);
+        return ResponseEntity.created(new URI("/api/option-item"))
+                .headers(HeaderUtil.createAlert(applicationName,  "A optionItem is created with identifier " + optionItem.getId(), optionItem.getName()))
+                .body(optionItem);
+    }
+
+    @PostMapping(path = "/option-item-child")
+    public ResponseEntity<Object> createOptionItemChild(@RequestBody OptionItemChildDTO optionItemChildDTO) throws URISyntaxException {
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Manager restaurant email not found"));
+        if (!email.equalsIgnoreCase(optionItemChildDTO.getRestaurantEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ban khong co quyen them noi dung nay!");
+        }
+        OptionItemChild optionItemChild = optionItemChildService.createOptionItemChild(optionItemChildDTO);
+        return ResponseEntity.created(new URI("/api/option-item-child"))
+                .headers(HeaderUtil.createAlert(applicationName,  "A optionItemChild is created with identifier " + optionItemChild.getId(), optionItemChild.getName()))
+                .body(optionItemChild);
     }
 
     private static boolean checkPasswordLength(String password) {

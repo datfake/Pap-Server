@@ -1,6 +1,5 @@
 package com.pap.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -28,6 +27,12 @@ public class OptionItemChild extends AbstractAuditingEntity implements Serializa
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @Column(name = "restaurant_email")
+    private String restaurantEmail;
+
+    @Column(nullable = false)
+    private boolean activated = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id", nullable = false)

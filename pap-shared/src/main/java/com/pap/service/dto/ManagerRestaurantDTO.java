@@ -3,7 +3,10 @@ package com.pap.service.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.config.Constants;
 import com.pap.domain.ManagerRestaurant;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -15,6 +18,7 @@ import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
  * A DTO representing a ManagerRestaurantDTO, with his authorities.
  */
 @Data
+@AllArgsConstructor
 public class ManagerRestaurantDTO {
 
     private String id;

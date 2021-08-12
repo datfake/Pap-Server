@@ -50,7 +50,13 @@ public class Item extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Column(name = "count_ordered")
-    private int countOrdered;
+    private int countOrdered = 0;
+
+    @Column(name = "restaurant_email")
+    private String restaurantEmail;
+
+    @Column(nullable = false)
+    private boolean activated = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryItem_id", nullable = false)

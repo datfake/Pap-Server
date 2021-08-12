@@ -7,9 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Table(name = "schedule_restaurant")
@@ -84,5 +82,9 @@ public class ScheduleRestaurant extends AbstractAuditingEntity implements Serial
     private LocalTime toSunday;
 
     @Column(name = "list_day_off")
-    private List<LocalDate> listDayOff;
+    private String listDayOff;
+
+    @OneToOne
+    @JoinColumn(name = "restaurant_id")
+    private ManagerRestaurant managerRestaurant;
 }

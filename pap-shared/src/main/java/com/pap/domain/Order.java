@@ -76,8 +76,17 @@ public class Order extends AbstractAuditingEntity implements Serializable {
     @Column(name = "note", length = 500)
     private String note;
 
-    @Column(name = "images", length = 500)
-    private String[] images;
+    @Column(name = "image_courier", length = 500)
+    private String imageCourier;
+
+    @Column(name = "imageRestaurant", length = 500)
+    private String imageRestaurant;
+
+    @Column(name = "imageBill", length = 500)
+    private String imageBill;
+
+    @Column(name = "imageProduct", length = 500)
+    private String imageProduct;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

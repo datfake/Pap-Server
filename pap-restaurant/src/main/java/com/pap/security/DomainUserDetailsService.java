@@ -29,19 +29,19 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String phone) {
-        log.debug("Authenticating {}", phone);
+    public UserDetails loadUserByUsername(final String email) {
+        log.debug("Authenticating {}", email);
 
-        return managerRestaurantRepository.findOneByPhone(phone)
-            .map(user -> createSpringSecurityUser(phone, user))
-            .orElseThrow(() -> new UsernameNotFoundException("ManagerRestaurant with phone " + phone + " was not found in the database"));
+        return managerRestaurantRepository.findOneByEmailIgnoreCase(email)
+            .map(user -> createSpringSecurityUser(email, user))
+            .orElseThrow(() -> new UsernameNotFoundException("ManagerRestaurant with email " + email + " was not found in the database"));
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String phone, ManagerRestaurant managerRestaurant) {
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String email, ManagerRestaurant managerRestaurant) {
         if (!managerRestaurant.isActivated()) {
-            throw new UserNotActivatedException("ManagerRestaurant " + phone + " was not activated");
+            throw new UserNotActivatedException("ManagerRestaurant " + email + " was not activated");
         }
-        return new org.springframework.security.core.userdetails.User(managerRestaurant.getPhone(),
+        return new org.springframework.security.core.userdetails.User(managerRestaurant.getEmail(),
             managerRestaurant.getPassword(),
             AuthorityUtils.createAuthorityList("ROLE_USER"));
     }

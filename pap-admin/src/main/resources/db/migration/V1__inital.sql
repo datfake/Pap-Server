@@ -2,6 +2,10 @@ DROP TABLE IF EXISTS public.user_authority;
 DROP TABLE IF EXISTS public.category_restaurant;
 DROP TABLE IF EXISTS public.order_detail;
 DROP TABLE IF EXISTS public.review;
+DROP TABLE IF EXISTS public.report;
+DROP TABLE IF EXISTS public.order_cancelled;
+DROP TABLE IF EXISTS public.complain;
+DROP TABLE IF EXISTS public.schedule_restaurant;
 DROP TABLE IF EXISTS public.order_product;
 DROP TABLE IF EXISTS public.option_item_child;
 DROP TABLE IF EXISTS public.option_item;
@@ -10,11 +14,14 @@ DROP TABLE IF EXISTS public.discount;
 DROP TABLE IF EXISTS public.category_item;
 DROP TABLE IF EXISTS public.pap_user;
 DROP TABLE IF EXISTS public.pap_authority;
-DROP TABLE IF EXISTS public.notice;
+DROP TABLE IF EXISTS public.notice_courier;
+DROP TABLE IF EXISTS public.notice_customer;
+DROP TABLE IF EXISTS public.notice_restaurant;
 DROP TABLE IF EXISTS public.manager_restaurant;
 DROP TABLE IF EXISTS public.customer;
 DROP TABLE IF EXISTS public.courier;
 DROP TABLE IF EXISTS public.category;
+
 -- public.category definition
 
 -- Drop table
@@ -35,10 +42,25 @@ CREATE TABLE public.category (
 	CONSTRAINT uk_acatplu22q5d1andql2jbvjy7 UNIQUE (code)
 );
 
-INSERT INTO public.category
-(id, created_by, created_date, last_modified_by, last_modified_date, "content", summary, title, code)
-VALUES(1, 'admin', '2021-08-04', 'admin', '2021-08-04', '', '', 'Cơm', 'COM'), (2, 'admin', '2021-08-04', 'admin', '2021-08-04', '', '', 'Ăn vặt', 'ANVAT')
-,(3, 'admin', '2021-08-04', 'admin', '2021-08-04', '', '', 'Trà sữa', 'TRASUA'),(4, 'admin', '2021-08-04', 'admin', '2021-08-04', '', '', 'Đồ uống', 'DOUONG');
+-- public.complain definition
+
+-- Drop table
+
+-- DROP TABLE public.complain;
+
+CREATE TABLE public.complain (
+	id bpchar(36) NOT NULL,
+	created_by varchar(50) NOT NULL,
+	created_date timestamp NULL,
+	last_modified_by varchar(50) NULL,
+	last_modified_date timestamp NULL,
+	"content" varchar(1000) NULL,
+	customer_phone varchar(255) NULL,
+	order_id varchar(255) NULL,
+	restaurant_id varchar(255) NULL,
+	CONSTRAINT complain_pkey PRIMARY KEY (id)
+);
+
 
 -- public.courier definition
 
@@ -137,6 +159,7 @@ CREATE TABLE public.manager_restaurant (
 	name_restaurant varchar(500) NOT NULL,
 	password_hash varchar(60) NOT NULL,
 	phone varchar(20) NOT NULL,
+	rate float4 NULL,
 	"role" varchar(255) NOT NULL,
 	sharing int4 NULL,
 	so_cccd varchar(12) NULL,
@@ -151,13 +174,13 @@ CREATE TABLE public.manager_restaurant (
 );
 
 
--- public."notice" definition
+-- public.notice_courier definition
 
 -- Drop table
 
--- DROP TABLE public."notice";
+-- DROP TABLE public.notice_courier;
 
-CREATE TABLE public."notice" (
+CREATE TABLE public.notice_courier (
 	id bpchar(36) NOT NULL,
 	created_by varchar(50) NOT NULL,
 	created_date timestamp NULL,
@@ -165,7 +188,43 @@ CREATE TABLE public."notice" (
 	last_modified_date timestamp NULL,
 	"content" text NOT NULL,
 	title varchar(50) NOT NULL,
-	CONSTRAINT notice_pkey PRIMARY KEY (id)
+	CONSTRAINT notice_courier_pkey PRIMARY KEY (id)
+);
+
+
+-- public.notice_customer definition
+
+-- Drop table
+
+-- DROP TABLE public.notice_customer;
+
+CREATE TABLE public.notice_customer (
+	id bpchar(36) NOT NULL,
+	created_by varchar(50) NOT NULL,
+	created_date timestamp NULL,
+	last_modified_by varchar(50) NULL,
+	last_modified_date timestamp NULL,
+	"content" text NOT NULL,
+	title varchar(50) NOT NULL,
+	CONSTRAINT notice_customer_pkey PRIMARY KEY (id)
+);
+
+
+-- public.notice_restaurant definition
+
+-- Drop table
+
+-- DROP TABLE public.notice_restaurant;
+
+CREATE TABLE public.notice_restaurant (
+	id bpchar(36) NOT NULL,
+	created_by varchar(50) NOT NULL,
+	created_date timestamp NULL,
+	last_modified_by varchar(50) NULL,
+	last_modified_date timestamp NULL,
+	"content" text NOT NULL,
+	title varchar(50) NOT NULL,
+	CONSTRAINT notice_restaurant_pkey PRIMARY KEY (id)
 );
 
 
@@ -180,9 +239,6 @@ CREATE TABLE public.pap_authority (
 	CONSTRAINT pap_authority_pkey PRIMARY KEY (name)
 );
 
-INSERT into public.pap_authority
-(name)
-VALUES('ROLE_ADMIN'),('ROLE_USER');
 
 -- public.pap_user definition
 
@@ -211,13 +267,6 @@ CREATE TABLE public.pap_user (
 	CONSTRAINT uk_3jhfjponb7d1u7to0tiv1ocoj UNIQUE (email),
 	CONSTRAINT uk_eglcwjdb9eoldphvb3rlm0eae UNIQUE (login)
 );
-
-INSERT INTO public.pap_user
-(id,created_by,created_date,last_modified_by,last_modified_date,activated,activation_key,email,first_name,image_url,lang_key,last_name,login,password_hash,reset_key)
-VALUES(1,'admin',null,'admin',null,true,null,'pap@gmail.com','admin','','en','','admin','$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC',''),
-(2,'user',null,'user',null,true,null,'user@gmail.com','user','','en','','user','$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K','');
-
-
 
 -- public.category_item definition
 
@@ -269,12 +318,14 @@ CREATE TABLE public.discount (
 	"content" varchar(1000) NOT NULL,
 	from_date timestamp NULL,
 	image_url varchar(256) NULL,
-	min_order_price numeric(19,2) NOT NULL,
-	price numeric(19,2) NOT NULL,
+	is_deleted int2 NULL,
+	min_order_price numeric(19,2) NULL,
+	price numeric(19,2) NULL,
 	quantity int4 NULL,
 	quantity_customer int4 NULL,
 	quantity_customer_day int4 NULL,
 	quantity_day int4 NULL,
+	sale int4 NULL,
 	title varchar(256) NOT NULL,
 	to_date timestamp NULL,
 	restaurant_id bpchar(36) NOT NULL,
@@ -362,7 +413,10 @@ CREATE TABLE public.order_product (
 	discount_id varchar(255) NULL,
 	discount_price numeric(19,2) NULL,
 	hand_delivery numeric(19,2) NULL,
-	images bytea NULL,
+	image_bill varchar(500) NULL,
+	image_courier varchar(500) NULL,
+	image_product varchar(500) NULL,
+	image_restaurant varchar(500) NULL,
 	name_courier varchar(255) NULL,
 	name_order varchar(255) NOT NULL,
 	note varchar(500) NULL,
@@ -379,6 +433,25 @@ CREATE TABLE public.order_product (
 	CONSTRAINT order_product_pkey PRIMARY KEY (id),
 	CONSTRAINT fkf759i0isryvfa8xe361w8xmof FOREIGN KEY (customer_id) REFERENCES customer(id),
 	CONSTRAINT fkia97ax2h4uwpid9gpxxcx09m1 FOREIGN KEY (courier_id) REFERENCES courier(id)
+);
+
+
+-- public.report definition
+
+-- Drop table
+
+-- DROP TABLE public.report;
+
+CREATE TABLE public.report (
+	id bpchar(36) NOT NULL,
+	"content" varchar(1000) NULL,
+	subject_id varchar(255) NULL,
+	type_user varchar(255) NULL,
+	type_subject varchar(255) NULL,
+	user_id varchar(255) NULL,
+	order_id bpchar(36) NULL,
+	CONSTRAINT report_pkey PRIMARY KEY (id),
+	CONSTRAINT fkqvvcskeq0umqyigogqn59v7f7 FOREIGN KEY (order_id) REFERENCES order_product(id)
 );
 
 
@@ -404,6 +477,39 @@ CREATE TABLE public.review (
 );
 
 
+-- public.schedule_restaurant definition
+
+-- Drop table
+
+-- DROP TABLE public.schedule_restaurant;
+
+CREATE TABLE public.schedule_restaurant (
+	id bpchar(36) NOT NULL,
+	created_by varchar(50) NOT NULL,
+	created_date timestamp NULL,
+	last_modified_by varchar(50) NULL,
+	last_modified_date timestamp NULL,
+	from_friday time NULL,
+	from_monday time NULL,
+	from_saturday time NULL,
+	from_sunday time NULL,
+	from_thursday time NULL,
+	from_tuesday time NULL,
+	from_wednesday time NULL,
+	list_day_off varchar(255) NULL,
+	to_friday time NULL,
+	to_monday time NULL,
+	to_saturday time NULL,
+	to_sunday time NULL,
+	to_thursday time NULL,
+	to_tuesday time NULL,
+	to_wednesday time NULL,
+	restaurant_id bpchar(36) NULL,
+	CONSTRAINT schedule_restaurant_pkey PRIMARY KEY (id),
+	CONSTRAINT fkj9dmhb5ehhe7mehlryfpaapcy FOREIGN KEY (restaurant_id) REFERENCES manager_restaurant(id)
+);
+
+
 -- public.user_authority definition
 
 -- Drop table
@@ -418,9 +524,21 @@ CREATE TABLE public.user_authority (
 	CONSTRAINT fksbktvlg8jp618hvatuluvtl1u FOREIGN KEY (authority_name) REFERENCES pap_authority(name)
 );
 
-INSERT INTO public.user_authority
-(user_id, authority_name)
-VALUES(1, 'ROLE_ADMIN'), (1, 'ROLE_USER'), (2, 'ROLE_USER');
+-- public.order_cancelled definition
+
+-- Drop table
+
+-- DROP TABLE public.order_cancelled;
+
+CREATE TABLE public.order_cancelled (
+	id bpchar(36) NOT NULL,
+	"content" varchar(1000) NULL,
+	type_user varchar(255) NULL,
+	user_id varchar(255) NULL,
+	order_id bpchar(36) NULL,
+	CONSTRAINT order_cancelled_pkey PRIMARY KEY (id),
+	CONSTRAINT fknk4tlfbep3o09u4ve787kryh0 FOREIGN KEY (order_id) REFERENCES order_product(id)
+);
 
 
 -- public.order_detail definition

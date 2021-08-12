@@ -9,10 +9,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "notice")
+@Table(name = "notice_customer")
 @Data
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Notice extends AbstractAuditingEntity implements Serializable {
+public class NoticeCustomer extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "uuid2")
