@@ -1,18 +1,24 @@
 package com.pap.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.config.Constants;
 import com.pap.domain.ManagerRestaurant;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.validation.constraints.*;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
+
+import static com.pap.domain.AbstractAuditingEntity.DATE_PATTERN;
+import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
 
 /**
- * A DTO representing a user, with his authorities.
+ * A DTO representing a ManagerRestaurantDTO, with his authorities.
  */
 @Data
+@AllArgsConstructor
 public class ManagerRestaurantDTO {
 
     private String id;
@@ -20,49 +26,71 @@ public class ManagerRestaurantDTO {
     // @Pattern(regexp = Constants.PHONE_REGEX)
     private String phone;
 
-    @Size(max = 50)
     private String fullName;
 
-    @Email
-    @Size(min = 5, max = 254)
     private String email;
 
-    @NotNull
-    @Column(name = "name_restaurant", length = 500)
     private String nameRestaurant;
 
-    @Column(name = "summary")
     private String summary;
 
-    @Column(name = "content")
     private String content;
 
-    @Column(name = "so_dkkd")
     private String soDKKD;
 
-    @NotNull
-    @Column(name = "address")
     private String address;
 
-    @NotNull
-    @Column(name = "status")
-    private boolean status = false;
+    private float rate;
 
-    @NotNull
-    @Column(name = "is_partner")
-    private boolean isPartner=false;
+    private boolean status;
 
-    @Size(max = 256)
+    private int sharing;
+
+    private boolean isPartner;
+
     private String avatar;
 
-    private boolean activated = false;
+    private boolean activated;
+
+    private String imageRestaurant;
+
+    private Constants.TypeBusiness typeBusiness;
+
+    private String soCMND;
+
+    private String imageFirstCMND;
+
+    private String imageLastCMND;
+
+    private String soCCCD;
+
+    private String imageFirstCCCD;
+
+    private String imageLastCCCD;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
+    private LocalDate dateCMND;
+
+    private String bankNumber;
+
+    private String nameBank;
+
+    private String fullNameBank;
+
+    private String branchBank;
+
+    private Constants.RoleManagerRestaurant roleManagerRestaurant;
+
+    private Set<String> categories;
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime lastModifiedDate;
 
 
@@ -79,10 +107,25 @@ public class ManagerRestaurantDTO {
         this.content = managerRestaurant.getContent();
         this.soDKKD = managerRestaurant.getSoDKKD();
         this.address = managerRestaurant.getAddress();
+        this.rate = managerRestaurant.getRate();
         this.status = managerRestaurant.isStatus();
         this.isPartner = managerRestaurant.isPartner();
+        this.sharing = managerRestaurant.getSharing();
         this.avatar = managerRestaurant.getAvatar();
         this.activated = managerRestaurant.isActivated();
+        this.imageRestaurant = managerRestaurant.getNameRestaurant();
+        this.typeBusiness = managerRestaurant.getTypeBusiness();
+        this.soCMND = managerRestaurant.getSoCMND();
+        this.imageFirstCMND = managerRestaurant.getImageFirstCMND();
+        this.imageLastCMND = managerRestaurant.getImageLastCMND();
+        this.soCCCD = managerRestaurant.getSoCCCD();
+        this.imageFirstCCCD = managerRestaurant.getImageFirstCCCD();
+        this.imageLastCCCD = managerRestaurant.getImageLastCCCD();
+        this.dateCMND = this.getDateCMND();
+        this.bankNumber = this.getBankNumber();
+        this.nameBank = this.getNameBank();
+        this.fullNameBank = this.getFullNameBank();
+        this.branchBank = this.getBranchBank();
         this.createdBy = managerRestaurant.getCreatedBy();
         this.createdDate = managerRestaurant.getCreatedDate();
         this.lastModifiedBy = managerRestaurant.getLastModifiedBy();

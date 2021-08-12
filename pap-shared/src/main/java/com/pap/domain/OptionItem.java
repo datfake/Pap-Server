@@ -28,6 +28,12 @@ public class OptionItem extends AbstractAuditingEntity implements Serializable {
     @Column(name = "name", length = 256)
     private String name;
 
+    @Column(name = "restaurant_email")
+    private String restaurantEmail;
+
+    @Column(nullable = false)
+    private boolean activated = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;

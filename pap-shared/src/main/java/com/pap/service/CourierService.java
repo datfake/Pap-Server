@@ -7,6 +7,8 @@ import com.pap.exception.NumberPhoneAlreadyUsedException;
 import com.pap.repository.CourierRepository;
 import com.pap.security.SecurityUtils;
 import com.pap.service.dto.CourierDTO;
+import com.pap.service.dto.CourierVM;
+import io.netty.util.AsyncMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -50,32 +52,6 @@ public class CourierService {
             });
     }
 
-    public Courier registerUser(CourierDTO courierDTO, String password) {
-        courierRepository.findOneByPhone(courierDTO.getPhone()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new NumberPhoneAlreadyUsedException();
-            }
-        });
-        Courier newCourier = new Courier();
-        String encryptedPassword = passwordEncoder.encode(password);
-        newCourier.setPhone(courierDTO.getPhone());
-        // new ManagerRestaurant gets initially a generated password
-        newCourier.setPassword(encryptedPassword);
-        newCourier.setFullName(courierDTO.getFullName());
-        newCourier.setLicensePlate(courierDTO.getLicensePlate());
-        newCourier.setSoCMND(courierDTO.getSoCMND());
-        if (courierDTO.getEmail() != null) {
-            newCourier.setEmail(courierDTO.getEmail().toLowerCase());
-        }
-        newCourier.setAvatar(courierDTO.getAvatar());
-        newCourier.setActivated(true);
-        courierRepository.save(newCourier);
-        this.clearUserCaches(newCourier);
-        log.debug("Created Information for Courier: {}", newCourier);
-        return newCourier;
-    }
-
     private boolean removeNonActivatedUser(Courier existingCourier) {
         if (existingCourier.isActivated()) {
             return false;
@@ -86,14 +62,32 @@ public class CourierService {
         return true;
     }
 
-    public Courier createUser(CourierDTO courierDTO) {
+    public Courier createCourier(CourierVM courierVM) {
         Courier courier = new Courier();
-        courier.setPhone(courierDTO.getPhone());
-        courier.setFullName(courierDTO.getFullName());
-        if (courierDTO.getEmail() != null) {
-            courier.setEmail(courierDTO.getEmail().toLowerCase());
+        courier.setPhone(courierVM.getPhone());
+        courier.setFullName(courierVM.getFullName());
+        if (courierVM.getEmail() != null) {
+            courier.setEmail(courierVM.getEmail().toLowerCase());
         }
-        courier.setAvatar(courierDTO.getAvatar());
+        courier.setAddress(courierVM.getAddress());
+        courier.setSoCMND(courierVM.getSoCMND());
+        courier.setImageFirstCCCD(courierVM.getImageFirstCMND());
+        courier.setImageLastCMND(courierVM.getImageLastCMND());
+        courier.setSoCCCD(courierVM.getSoCCCD());
+        courier.setImageFirstCCCD(courierVM.getImageFirstCCCD());
+        courier.setImageLastCMND(courierVM.getImageLastCCCD());
+        courier.setDateCMND(courierVM.getDateCMND());
+        courier.setBankNumber(courierVM.getBankNumber());
+        courier.setNameBank(courierVM.getNameBank());
+        courier.setFullNameBank(courierVM.getFullNameBank());
+        courier.setBranchBank(courierVM.getBranchBank());
+        courier.setAvatar(courierVM.getAvatar());
+        courier.setLicensePlate(courierVM.getLicensePlate());
+        courier.setImageGPLX(courierVM.getImageGPLX());
+        courier.setImageCavet(courierVM.getImageCavet());
+        courier.setImageMotorbike(courierVM.getImageMotorbike());
+        String encryptedPassword = passwordEncoder.encode(courierVM.getPassword());
+        courier.setPassword(encryptedPassword);
         courier.setActivated(true);
         courierRepository.save(courier);
         this.clearUserCaches(courier);
@@ -101,35 +95,45 @@ public class CourierService {
         return courier;
     }
 
-    /**
-     * Update all information for a specific user, and return the modified user.
-     *
-     * @param courierDTO user to update.
-     * @return updated user.
-     */
-    public Optional<CourierDTO> updateUser(CourierDTO courierDTO) {
+    public Optional<CourierDTO> updateCourier(CourierDTO courierDTO) {
         return Optional.of(courierRepository
             .findById(courierDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(user -> {
-                this.clearUserCaches(user);
-                user.setPhone(courierDTO.getPhone());
-                user.setFullName(courierDTO.getFullName());
+            .map(courier -> {
+                this.clearUserCaches(courier);
+                courier.setPhone(courierDTO.getPhone());
+                courier.setFullName(courierDTO.getFullName());
                 if (courierDTO.getEmail() != null) {
-                    user.setEmail(courierDTO.getEmail().toLowerCase());
+                    courier.setEmail(courierDTO.getEmail().toLowerCase());
                 }
-                user.setAvatar(courierDTO.getAvatar());
-                user.setActivated(courierDTO.isActivated());
-                this.clearUserCaches(user);
-                log.debug("Changed Information for Courier: {}", user);
-                return user;
+                courier.setAddress(courierDTO.getAddress());
+                courier.setSoCMND(courierDTO.getSoCMND());
+                courier.setImageFirstCCCD(courierDTO.getImageFirstCMND());
+                courier.setImageLastCMND(courierDTO.getImageLastCMND());
+                courier.setSoCCCD(courierDTO.getSoCCCD());
+                courier.setImageFirstCCCD(courierDTO.getImageFirstCCCD());
+                courier.setImageLastCMND(courierDTO.getImageLastCCCD());
+                courier.setDateCMND(courierDTO.getDateCMND());
+                courier.setBankNumber(courierDTO.getBankNumber());
+                courier.setNameBank(courierDTO.getNameBank());
+                courier.setFullNameBank(courierDTO.getFullNameBank());
+                courier.setBranchBank(courierDTO.getBranchBank());
+                courier.setAvatar(courierDTO.getAvatar());
+                courier.setLicensePlate(courierDTO.getLicensePlate());
+                courier.setImageGPLX(courierDTO.getImageGPLX());
+                courier.setImageCavet(courierDTO.getImageCavet());
+                courier.setImageMotorbike(courierDTO.getImageMotorbike());
+                courier.setActivated(courierDTO.isActivated());
+                this.clearUserCaches(courier);
+                log.debug("Changed Information for Courier: {}", courier);
+                return courier;
             })
             .map(CourierDTO::new);
     }
 
-    public void deleteUser(String login) {
-        courierRepository.findOneByPhone(login).ifPresent(user -> {
+    public void deleteAccountCourier(String phone) {
+        courierRepository.findOneByPhone(phone).ifPresent(user -> {
             courierRepository.delete(user);
             this.clearUserCaches(user);
             log.debug("Deleted Courier: {}", user);
@@ -175,5 +179,10 @@ public class CourierService {
         if (courier.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(CourierRepository.USERS_BY_EMAIL_CACHE)).evict(courier.getEmail());
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Courier> getCourierByPhone(String phone) {
+        return courierRepository.findOneByPhone(phone);
     }
 }

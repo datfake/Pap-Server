@@ -1,6 +1,8 @@
 package com.pap.service;
 
+import com.pap.domain.Courier;
 import com.pap.domain.Customer;
+import com.pap.domain.ManagerRestaurant;
 import com.pap.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -87,6 +89,36 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplate(ManagerRestaurant managerRestaurant, String templateName, String titleKey) {
+        if (managerRestaurant.getEmail() == null) {
+            log.debug("Email doesn't exist for customer '{}'", managerRestaurant.getPhone());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag("vn");
+        Context context = new Context(locale);
+        context.setVariable(USER, managerRestaurant);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(managerRestaurant.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendEmailFromTemplate(Courier courier, String templateName, String titleKey) {
+        if (courier.getEmail() == null) {
+            log.debug("Email doesn't exist for customer '{}'", courier.getPhone());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag("vn");
+        Context context = new Context(locale);
+        context.setVariable(USER, courier);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(courier.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(Customer customer) {
         log.debug("Sending activation email to '{}'", customer.getEmail());
         sendEmailFromTemplate(customer, "mail/activationEmail", "email.activation.title");
@@ -135,5 +167,41 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendActivationEmail(ManagerRestaurant managerRestaurant) {
+        log.debug("Sending activation email to '{}'", managerRestaurant.getEmail());
+        sendEmailFromTemplate(managerRestaurant, "mail/activationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendCreationEmail(ManagerRestaurant managerRestaurant) {
+        log.debug("Sending creation email to '{}'", managerRestaurant.getEmail());
+        sendEmailFromTemplate(managerRestaurant, "mail/creationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendPasswordResetMail(ManagerRestaurant managerRestaurant) {
+        log.debug("Sending password reset email to '{}'", managerRestaurant.getEmail());
+        sendEmailFromTemplate(managerRestaurant, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendActivationEmail(Courier courier) {
+        log.debug("Sending activation email to '{}'", courier.getEmail());
+        sendEmailFromTemplate(courier, "mail/activationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendCreationEmail(Courier courier) {
+        log.debug("Sending creation email to '{}'", courier.getEmail());
+        sendEmailFromTemplate(courier, "mail/creationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendPasswordResetMail(Courier courier) {
+        log.debug("Sending password reset email to '{}'", courier.getEmail());
+        sendEmailFromTemplate(courier, "mail/passwordResetEmail", "email.reset.title");
     }
 }

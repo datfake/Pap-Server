@@ -1,5 +1,6 @@
 package com.pap.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
@@ -11,9 +12,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -54,22 +55,72 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
-    @Size(min = 9, max = 12)
-    @Column(name="so_cmnd", unique = true, nullable = false)
-    @NotNull
+    @Column(name = "address", length = 500)
+    private String address;
+
+    @Size(max = 12)
+    @Column(name = "so_cmnd", length = 256)
     private String soCMND;
 
+    @Size(max = 256)
+    @Column(name = "image_first_cmnd", length = 256)
+    private String imageFirstCMND;
+
+    @Size(max = 256)
+    @Column(name = "image_last_cmnd", length = 256)
+    private String imageLastCMND;
+
+    @Size(max = 12)
+    @Column(name = "so_cccd", length = 256)
+    private String soCCCD;
+
+    @Size(max = 256)
+    @Column(name = "image_first_cccd", length = 256)
+    private String imageFirstCCCD;
+
+    @Size(max = 256)
+    @Column(name = "image_last_cccd", length = 256)
+    private String imageLastCCCD;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
+    @Column(name = "date_cmnd")
+    private LocalDate dateCMND;
+
+    @Column(name = "bank_number", length = 20)
+    private String bankNumber;
+
+    @Column(name = "name_bank", length = 256)
+    private String nameBank;
+
+    @Column(name = "full_name_bank", length = 256)
+    private String fullNameBank;
+
+    @Column(name = "branch_bank", length = 256)
+    private String branchBank;
+
     @Column(name="license_plate", unique = true, nullable = false)
-    @NotNull
     private String licensePlate;
 
+    @Size(max = 256)
+    @Column(name = "image_gplx", length = 256)
+    private String imageGPLX;
+
+    @Size(max = 256)
+    @Column(name = "image_cavet", length = 256)
+    private String imageCavet;
+
+    @Size(max = 256)
+    @Column(name = "image_motorbike", length = 256)
+    private String imageMotorbike;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull
     private Constants.CourierStatus status = Constants.CourierStatus.OFFLINE;
 
     @NotNull
     @Column(nullable = false)
-    private boolean activated = false;
+    private boolean activated = true;
 
     @Size(max = 256)
     @Column(name = "avatar", length = 256)
@@ -92,21 +143,5 @@ public class Courier extends AbstractAuditingEntity implements Serializable {
     @Override
     public int hashCode() {
         return 31;
-    }
-
-    // prettier-ignore
-
-
-    @Override
-    public String toString() {
-        return "Courier{" +
-            "id='" + id + '\'' +
-            ", phone='" + phone + '\'' +
-            ", password='" + password + '\'' +
-            ", fullName='" + fullName + '\'' +
-            ", email='" + email + '\'' +
-            ", activated=" + activated +
-            ", avatar='" + avatar + '\'' +
-            '}';
     }
 }

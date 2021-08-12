@@ -1,5 +1,6 @@
 package com.pap.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pap.config.Constants;
 import com.pap.domain.Authority;
 import com.pap.domain.User;
@@ -12,6 +13,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.pap.domain.AbstractAuditingEntity.DATE_TIME_PATTERN;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -45,10 +48,12 @@ public class UserDTO {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime createdDate;
 
     private String lastModifiedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_PATTERN)
     private LocalDateTime lastModifiedDate;
 
     private Set<String> authorities;

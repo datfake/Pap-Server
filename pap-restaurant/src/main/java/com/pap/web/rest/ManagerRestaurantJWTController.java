@@ -55,9 +55,9 @@ public class ManagerRestaurantJWTController {
     public ResponseEntity authorize(@Valid @RequestBody LoginVM loginVM, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(loginVM.getPhone(), loginVM.getPassword());
+            new UsernamePasswordAuthenticationToken(loginVM.getEmail(), loginVM.getPassword());
         try {
-            Optional<ManagerRestaurant> managerRestaurant = managerRestaurantRepository.findOneByPhone(loginVM.getPhone());
+            Optional<ManagerRestaurant> managerRestaurant = managerRestaurantRepository.findOneByEmailIgnoreCase(loginVM.getEmail());
             if (managerRestaurant.isPresent()) {
                 if (passwordEncoder.matches(loginVM.getPassword(), managerRestaurant.get().getPassword())) {
                     Authentication authentication = this.authenticationManager.authenticate(authenticationToken);

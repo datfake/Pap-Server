@@ -22,7 +22,7 @@ public interface CourierRepository extends JpaRepository<Courier, String> {
 
     Optional<Courier> findOneByEmailIgnoreCase(String email);
 
-    Optional<Courier> findOneByPhone(String login);
+    Optional<Courier> findOneByPhone(String phone);
 
-    Page<Courier> findAllByPhoneNot(Pageable pageable, String login);
+    Page<Courier> findAllByPhoneNot(Pageable pageable, String phone);
 }

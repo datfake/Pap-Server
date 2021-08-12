@@ -41,25 +41,12 @@ public class CustomerController {
         this.customerRepository = customerRepository1;
     }
 
-    /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
-     *
-     * @param request the HTTP request.
-     * @return the login if the user is authenticated.
-     */
     @GetMapping("/authenticate")
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
     }
 
-    /**
-     * {@code POST  /account} : update the current user information.
-     *
-     * @param customerDTO the current user information.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
-     */
     @PutMapping("/account")
     public ResponseEntity<CustomerDTO> updateAccount(@Valid @RequestBody CustomerDTO customerDTO) {
         String numberPhoneLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Người dùng hiện tại không tìm thấy"));
@@ -70,4 +57,6 @@ public class CustomerController {
         customerService.updateUser(customerDTO.getFullName(), customerDTO.getEmail(), customerDTO.getAvatar());
         return new ResponseEntity("Thay đổi thông tin thành công", HttpStatus.OK);
     }
+
+
 }

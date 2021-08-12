@@ -1,5 +1,6 @@
 package com.pap.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pap.config.Constants;
@@ -74,70 +75,78 @@ public class ManagerRestaurant extends AbstractAuditingEntity implements Seriali
     @Column(name = "address")
     private String address;
 
+    @Column(name = "rate")
+    private float rate = 0.0f;
+
     @NotNull
     @Column(name = "status")
     private boolean status = false;
 
     @NotNull
     @Column(name = "is_partner")
-    private boolean isPartner=false;
+    private boolean isPartner;
 
     @Column(name = "sharing")
     private int sharing;
 
     @NotNull
     @Column(nullable = false)
-    private boolean activated = false;
+    private boolean activated = true;
 
     @Size(max = 256)
     @Column(name = "avatar", length = 256)
     private String avatar;
 
-    @NotNull
     @Size(max = 256)
     @Column(name = "image_restaurant", length = 256)
     private String imageRestaurant;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "type_business")
     private Constants.TypeBusiness typeBusiness;
 
-    @NotNull
     @Size(max = 12)
     @Column(name = "so_cmnd", length = 256)
-    private String soCmnd;
+    private String soCMND;
 
-    @NotNull
     @Size(max = 256)
     @Column(name = "image_first_cmnd", length = 256)
-    private String imageFirstCmnd;
+    private String imageFirstCMND;
 
-    @NotNull
     @Size(max = 256)
     @Column(name = "image_last_cmnd", length = 256)
-    private String imageLastCmnd;
+    private String imageLastCMND;
 
-    @NotNull
+    @Size(max = 12)
+    @Column(name = "so_cccd", length = 256)
+    private String soCCCD;
+
+    @Size(max = 256)
+    @Column(name = "image_first_cccd", length = 256)
+    private String imageFirstCCCD;
+
+    @Size(max = 256)
+    @Column(name = "image_last_cccd", length = 256)
+    private String imageLastCCCD;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
     @Column(name = "date_cmnd")
-    private LocalDate dateCmnd;
+    private LocalDate dateCMND;
 
-    @NotNull
     @Column(name = "bank_number", length = 20)
     private String bankNumber;
 
-    @NotNull
     @Column(name = "name_bank", length = 256)
     private String nameBank;
 
-    @NotNull
     @Column(name = "full_name_bank", length = 256)
     private String fullNameBank;
 
-    @NotNull
     @Column(name = "branch_bank", length = 256)
     private String branchBank;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Constants.RoleManagerRestaurant roleManagerRestaurant;
 

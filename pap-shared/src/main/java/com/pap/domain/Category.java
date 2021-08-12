@@ -25,6 +25,9 @@ public class Category extends AbstractAuditingEntity implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Integer id;
 
+    @Column(name = "code", length = 20, unique = true)
+    private String code;
+
     @Column(name = "title", length = 250)
     private String title;
 
