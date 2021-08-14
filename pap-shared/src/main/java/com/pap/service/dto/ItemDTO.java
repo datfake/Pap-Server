@@ -1,11 +1,15 @@
 package com.pap.service.dto;
 
 import com.pap.domain.Item;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemDTO {
 
     private String id;
