@@ -113,7 +113,7 @@ public class ManagerRestaurantService {
         return true;
     }
 
-    public ManagerRestaurant createManagerRestaurant(ManagerRestaurantVM managerRestaurantVM) {
+    public ManagerRestaurant createManagerRestaurant(ManagerRestaurantDTO managerRestaurantVM) {
         ManagerRestaurant managerRestaurant = new ManagerRestaurant();
         managerRestaurant.setPhone(managerRestaurantVM.getPhone());
         managerRestaurant.setFullName(managerRestaurantVM.getFullName());
@@ -142,7 +142,7 @@ public class ManagerRestaurantService {
         managerRestaurant.setFullNameBank(managerRestaurantVM.getFullNameBank());
         managerRestaurant.setBranchBank(managerRestaurantVM.getBranchBank());
         managerRestaurant.setRoleManagerRestaurant(managerRestaurantVM.getRoleManagerRestaurant());
-        String encryptedPassword = passwordEncoder.encode(managerRestaurantVM.getPassword());
+        String encryptedPassword = passwordEncoder.encode("12345678");
         managerRestaurant.setPassword(encryptedPassword);
         managerRestaurant.setActivated(true);
         Set<Category> categorySet = new HashSet<>();

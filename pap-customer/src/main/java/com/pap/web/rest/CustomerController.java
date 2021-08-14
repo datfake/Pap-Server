@@ -7,6 +7,7 @@ import com.pap.security.SecurityUtils;
 import com.pap.service.CustomerService;
 import com.pap.service.MailService;
 import com.pap.service.dto.CustomerDTO;
+import com.pap.service.dto.RestaurantDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,7 +40,7 @@ public class CustomerController {
 
     public CustomerController(CustomerRepository customerRepository, CustomerService customerService, MailService mailService, CustomerRepository customerRepository1) {
         this.customerService = customerService;
-        this.customerRepository = customerRepository1;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("/authenticate")
@@ -58,5 +60,9 @@ public class CustomerController {
         return new ResponseEntity("Thay đổi thông tin thành công", HttpStatus.OK);
     }
 
-
+    @GetMapping("/restaurant/{categoryId}")
+    public List<RestaurantDTO> getAllRestaurantByCategoryId(@PathVariable Integer categoryId) {
+        log.debug("REST request get all restaurant by categoryId");
+        return null;
+    }
 }
