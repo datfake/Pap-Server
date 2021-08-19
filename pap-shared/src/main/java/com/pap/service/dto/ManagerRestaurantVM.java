@@ -1,12 +1,14 @@
 package com.pap.service.dto;
 
 import com.pap.service.dto.ManagerRestaurantDTO;
+import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.Size;
 
 /**
  * View Model extending the ManagerRestaurantDTO, which is meant to be used in the user management UI.
  */
+@AllArgsConstructor
 public class ManagerRestaurantVM extends ManagerRestaurantDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;

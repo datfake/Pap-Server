@@ -1,5 +1,6 @@
 package com.pap.service.dto;
 
+import com.pap.domain.ManagerRestaurant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,12 @@ public class RestaurantDTO {
     private String avatar;
     private float rate;
     private Set<String> titleDiscounts;
+
+    public RestaurantDTO(ManagerRestaurant managerRestaurant) {
+        this.id = managerRestaurant.getId();
+        this.nameRestaurant = managerRestaurant.getNameRestaurant();
+        this.address = managerRestaurant.getAddress();
+        this.rate = managerRestaurant.getRate();
+        this.avatar = managerRestaurant.getAvatar();
+    }
 }
