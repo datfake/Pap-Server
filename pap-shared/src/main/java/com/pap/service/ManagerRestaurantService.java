@@ -9,7 +9,7 @@ import com.pap.repository.CategoryRepository;
 import com.pap.repository.ManagerRestaurantRepository;
 import com.pap.security.SecurityUtils;
 import com.pap.service.dto.ManagerRestaurantDTO;
-import com.pap.service.dto.ManagerRestaurantVM;
+import com.pap.service.dto.RestaurantDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -145,12 +145,12 @@ public class ManagerRestaurantService {
         String encryptedPassword = passwordEncoder.encode("12345678");
         managerRestaurant.setPassword(encryptedPassword);
         managerRestaurant.setActivated(true);
-        Set<Category> categorySet = new HashSet<>();
-        for(String code:managerRestaurantVM.getCategories()) {
-            categorySet.add(categoryRepository.findByCode(code));
-        }
-        managerRestaurant.setCategories(categorySet);
         managerRestaurantRepository.save(managerRestaurant);
+        for(String code:managerRestaurantVM.getCategories()) {
+            Category category = categoryRepository.findByCode(code);
+            category.getRestaurants().add(managerRestaurant);
+            categoryRepository.save(category);
+        }
         this.clearUserCaches(managerRestaurant);
         log.debug("Created Information for ManagerRestaurant: {}", managerRestaurant);
         return managerRestaurant;
@@ -249,5 +249,10 @@ public class ManagerRestaurantService {
 
     public Optional<ManagerRestaurant> getAccountRestaurantByPhone(String phone) {
         return managerRestaurantRepository.findOneByPhone(phone);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<RestaurantDTO> getAllRestaurantsByCategoryId(Pageable pageable, Integer categoryId) {
+        return managerRestaurantRepository.findByCategoriesId(pageable, categoryId).map(RestaurantDTO::new);
     }
 }

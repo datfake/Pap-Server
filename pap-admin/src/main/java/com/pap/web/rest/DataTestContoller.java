@@ -27,10 +27,10 @@ public class DataTestContoller {
     }
 
     @PostMapping("/add-data-test")
-    public ResponseEntity getAllRestaurantByCategoryId(@PathVariable Integer categoryId) {
+    public ResponseEntity getAllRestaurantByCategoryId() {
 
         ManagerRestaurant managerRestaurant1 = managerRestaurantService.createManagerRestaurant(new ManagerRestaurantDTO(
-                null,"09865253634", "Nguyễn Duy Khánh", "khanhnguyen1025@gmail.com", "Cá chiên Mong A", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
+                null,"09865253634", "Nguyễn Duy Khánh", "khanhnguyend10256@gmail.com", "Cá chiên Mong A", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
                 "", Constants.TypeBusiness.CANHAN, "1873623634", "", "" ,"", "", "", LocalDate.now(), "6726632788754", "TP Bank", "NGUYEN DUY KHANH", "Hue", Constants.RoleManagerRestaurant.CHUCUAHANG,
             new HashSet<>(Arrays.asList("COM", "TRASUA")), "admin", LocalDateTime.now(), null, LocalDateTime.now())
         );
@@ -42,13 +42,31 @@ public class DataTestContoller {
         );
 
         ManagerRestaurant managerRestaurant3 = managerRestaurantService.createManagerRestaurant(new ManagerRestaurantDTO(
-                null,"09861253631", "Nguyễn Duy Khánh 2", "kanhnguyen1025@gmail.com", "Cá chiên Mong A 1", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
+                null,"09861253631", "Nguyễn Duy Khánh 2", "kanhnguyaen1025@gmail.com", "Cá chiên Mong A 1", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
                 "", Constants.TypeBusiness.CANHAN, "1873623634", "", "" ,"", "", "", LocalDate.now(), "6726632788754", "TP Bank", "NGUYEN DUY KHANH", "Hue", Constants.RoleManagerRestaurant.CHUCUAHANG,
                 new HashSet<>(Arrays.asList("COM")), "admin", LocalDateTime.now(), null, LocalDateTime.now())
         );
 
         ManagerRestaurant managerRestaurant4 = managerRestaurantService.createManagerRestaurant(new ManagerRestaurantDTO(
                 null,"09863253631", "Nguyễn Duy Khánh 3", "hanhnguyen1025@gmail.com", "Cá chiên Mong A 2", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
+                "", Constants.TypeBusiness.CANHAN, "1873623634", "", "" ,"", "", "", LocalDate.now(), "6726632788754", "TP Bank", "NGUYEN DUY KHANH", "Hue", Constants.RoleManagerRestaurant.CHUCUAHANG,
+                new HashSet<>(Arrays.asList("COM", "TRASUA")), "admin", LocalDateTime.now(), null, LocalDateTime.now())
+        );
+
+        ManagerRestaurant managerRestaurant5 = managerRestaurantService.createManagerRestaurant(new ManagerRestaurantDTO(
+                null,"08863253631", "Nguyễn Duy Khánh 4", "hanhnguyen102@gmail.com", "Cá chiên Mong A 2", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
+                "", Constants.TypeBusiness.CANHAN, "1873623634", "", "" ,"", "", "", LocalDate.now(), "6726632788754", "TP Bank", "NGUYEN DUY KHANH", "Hue", Constants.RoleManagerRestaurant.CHUCUAHANG,
+                new HashSet<>(Arrays.asList("COM", "TRASUA")), "admin", LocalDateTime.now(), null, LocalDateTime.now())
+        );
+
+        ManagerRestaurant managerRestaurant6 = managerRestaurantService.createManagerRestaurant(new ManagerRestaurantDTO(
+                null,"08863253731", "Nguyễn Duy Khánh54", "hanhnguyen1022@gmail.com", "Cá chiên Mong A 2", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
+                "", Constants.TypeBusiness.CANHAN, "1873623634", "", "" ,"", "", "", LocalDate.now(), "6726632788754", "TP Bank", "NGUYEN DUY KHANH", "Hue", Constants.RoleManagerRestaurant.CHUCUAHANG,
+                new HashSet<>(Arrays.asList("COM", "TRASUA")), "admin", LocalDateTime.now(), null, LocalDateTime.now())
+        );
+
+        ManagerRestaurant managerRestaurant7 = managerRestaurantService.createManagerRestaurant(new ManagerRestaurantDTO(
+                null,"08863253131", "Nguyễn Duy Khánh 7", "hanhnguyen2102@gmail.com", "Cá chiên Mong A 2", "", "", "", "75 Mong A, Phu Vang", 3.5f, false, 10, true, "", true,
                 "", Constants.TypeBusiness.CANHAN, "1873623634", "", "" ,"", "", "", LocalDate.now(), "6726632788754", "TP Bank", "NGUYEN DUY KHANH", "Hue", Constants.RoleManagerRestaurant.CHUCUAHANG,
                 new HashSet<>(Arrays.asList("COM", "TRASUA")), "admin", LocalDateTime.now(), null, LocalDateTime.now())
         );

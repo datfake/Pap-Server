@@ -25,4 +25,6 @@ public interface ManagerRestaurantRepository extends JpaRepository<ManagerRestau
     Optional<ManagerRestaurant> findOneByPhone(String phone);
 
     Page<ManagerRestaurant> findAllByPhoneNot(Pageable pageable, String phone);
+
+    Page<ManagerRestaurant> findByCategoriesId(Pageable pageable, Integer CategoryId);
 }
