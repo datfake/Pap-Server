@@ -1,8 +1,7 @@
-package com.pap.config;
+package com.pap.security;
 
-import com.pap.security.*;
-import com.pap.security.jwt.*;
-
+import com.pap.security.jwt.JWTConfigurer;
+import com.pap.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -75,8 +74,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
             .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/send-otp").permitAll()
-            .antMatchers("/api/add-data-test").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()

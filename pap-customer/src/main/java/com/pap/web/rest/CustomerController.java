@@ -1,8 +1,10 @@
 package com.pap.web.rest;
 
+import com.pap.domain.CategoryItem;
 import com.pap.domain.Customer;
 import com.pap.repository.CustomerRepository;
 import com.pap.security.SecurityUtils;
+import com.pap.service.CategoryItemService;
 import com.pap.service.CustomerService;
 import com.pap.service.MailService;
 import com.pap.service.ManagerRestaurantService;
@@ -45,10 +47,13 @@ public class CustomerController {
 
     private final ManagerRestaurantService managerRestaurantService;
 
-    public CustomerController(CustomerRepository customerRepository, CustomerService customerService, MailService mailService, CustomerRepository customerRepository1, ManagerRestaurantService managerRestaurantService) {
+    private final CategoryItemService categoryItemService;
+
+    public CustomerController(CustomerRepository customerRepository, CustomerService customerService, MailService mailService, CustomerRepository customerRepository1, ManagerRestaurantService managerRestaurantService, CategoryItemService categoryItemService) {
         this.customerService = customerService;
         this.customerRepository = customerRepository;
         this.managerRestaurantService = managerRestaurantService;
+        this.categoryItemService = categoryItemService;
     }
 
     @GetMapping("/authenticate")
@@ -72,6 +77,14 @@ public class CustomerController {
     public ResponseEntity<List<RestaurantDTO>> getAllRestaurantByCategoryId(Pageable pageable, @PathVariable Integer categoryId) {
         log.debug("REST request get all restaurant by categoryId");
         final Page<RestaurantDTO> page = managerRestaurantService.getAllRestaurantsByCategoryId(pageable, categoryId);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/item/{restaurantId}")
+    public ResponseEntity<List<CategoryItem>> getAllItemByRestaurantId(Pageable pageable, @PathVariable String restaurantId) {
+        log.debug("REST request get all item by restaurantId");
+        final Page<CategoryItem> page = categoryItemService.getAllItemByRestaurantId(pageable, restaurantId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
